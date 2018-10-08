@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:define name="header">
+        <title>MEDAPP - Patients</title>
+        <f:metadata>
+            <f:viewAction action="#{patientsBeans.onLoad}" />  
+        </f:metadata>
+    </ui:define>
+
+    <ui:include src="common/style.html" />
+
+    <h:body>
+        <ui:include src="common/header.html" />
+
+        <div class="middle">
+            <h:form>
+                <h:dataTable id="patients" columnClasses="list-column" class="table"
+                             headerClass="list-header" rowClasses="list-row" 
+                             value="#{patientsBeans.patientsList}" var="patient">   
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Patient Name" />
+                        </f:facet>
+                        <h:outputText value="#{patient.name}"/>
+                    </h:column>  
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Patient Name" />
+                        </f:facet>
+                        <h:outputText value="#{patient.name}"/>
+                    </h:column>
+                </h:dataTable> 
+            </h:form>
+        </div>
+
+        <ui:include src="common/footer.html" />
+    </h:body>
+</html>
+
