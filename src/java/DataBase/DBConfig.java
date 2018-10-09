@@ -10,7 +10,7 @@ public class DBConfig {
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://sql12.freemysqlhosting.net:3306/sql12260042", "sql12260042", "kPxQzPneMT");
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
         return connection;
     }

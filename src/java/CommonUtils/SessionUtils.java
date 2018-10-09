@@ -47,4 +47,16 @@ public class SessionUtils {
     public static String getRole() {
         return getSession().getAttribute("role").toString();
     }
+    
+    public boolean isUserAdmin(){
+        return "Administrator".equals(getRole());
+    }
+    
+    public boolean isUserDoctor(){
+        return "Doctor".equals(getRole());
+    }
+    
+    public boolean isUserPatient(){
+        return "Patient".equals(getRole());
+    }
 }

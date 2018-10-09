@@ -26,7 +26,7 @@ public class PatientsBeans {
     }
     
     public void getPatientsList(String filter){
-        patientsList = QueryUtils.getPatientsList(filter);
+        //patientsList = QueryUtils.getPatientsList(filter);
     }
     
     public void onLoad(){

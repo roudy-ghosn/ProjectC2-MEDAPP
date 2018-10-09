@@ -19,7 +19,7 @@
 
         <div class="middle">
             <h:form>
-                <h:dataTable id="patients" columnClasses="list-column" class="table"
+                <h:dataTable id="patients" columnClasses="list-column"
                              headerClass="list-header" rowClasses="list-row" 
                              value="#{patientsBeans.patientsList}" var="patient">   
                     <h:column>
@@ -28,7 +28,7 @@
                         </f:facet>
                         <h:outputText value="#{patient.name}"/>
                     </h:column>  
-                    <h:column>
+                    <h:column class="list-column">
                         <f:facet name="header">
                             <h:outputText value="Patient Name" />
                         </f:facet>
