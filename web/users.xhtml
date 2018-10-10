@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="header">
         <title>MEDAPP - Users</title>
@@ -17,35 +17,43 @@
     <h:body>
         <ui:include src="common/header.html" />
         <div class="middle">
-            <div style="text-align: right;">
-                <h:button value="Add" onclick="#{usersBean.addUser()}"/>
-            </div>
             <h:form>
+                <div style="text-align: right;" class="actionBar">
+                    <h:commandButton value="Add" action="#{usersBean.addNewUser()}" />
+                </div>
                 <h:dataTable id="users" value="#{usersBean.usersList}" var="user" headerClass="list-header" rowClasses="list-row" class="dataDisplay">
                     <h:column>
-                        <f:facet name="header"><h:outputText value="Role"/></f:facet>
-                        <h:selectOneMenu value="#{usersBean.rolesList}"  required="true" style="margin-right: 30px;">
-                            <f:selectItems value="#{user.role}"/>
+                        <f:facet name="header">Role</f:facet>
+                        <h:selectOneMenu value="#{user.role}"  required="true">
+                            <f:selectItems value="#{usersBean.rolesList}" var="role" itemValue="#{role.id}" itemLabel="#{role.description}"/>
                         </h:selectOneMenu>
                     </h:column>
                     <h:column>
-                        <f:facet name="header"><h:outputText value="UserName"/></f:facet>
+                        <f:facet name="header">Person</f:facet>
+                        <h:selectOneMenu value="#{user.person}"  required="true">
+                            <f:selectItems value="#{usersBean.personsList}" var="person" itemValue="#{person.id}" itemLabel="#{person.firstName} #{person.lastName}"/>
+                        </h:selectOneMenu>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">UserName</f:facet>
                         <h:inputText value="#{user.username}"/>
                     </h:column>
                     <h:column>
-                        <f:facet name="header"><h:outputText value="Email"/></f:facet>
-                        <h:inputText value="#{user.person.email}"/>
+                        <f:facet name="header">Password</f:facet>
+                        <h:inputText value="#{user.password}"/>
                     </h:column>
                     <h:column>
-                        <f:facet name="header"><h:outputText value="Actions"/></f:facet>
-                        <h:button value="Delete" onclick="#{usersBean.deleteUser(user.id)}"/>
-                        <h:button value="Edit" onclick="#{usersBean.editUser(user.id)}"/>
+                        <f:facet name="header">Actions</f:facet>
+                        <h:commandLink value="Delete" action="#{usersBean.deleteUser(user.id)}" />
                     </h:column>
                 </h:dataTable> 
+                <div style="text-align: right;" class="actionBar">
+                    <h:commandButton value="Save" action="#{usersBean.save()}" />
+                </div>
             </h:form>
         </div>
 
         <ui:include src="common/footer.html" />
     </h:body>
-</html>
+</ui:composition>
 

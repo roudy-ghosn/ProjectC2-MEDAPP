@@ -5,6 +5,10 @@ public class Patient extends Person {
     private MedicalFile medicalFile;
     private Doctor responsibleObserver;
 
+    public Patient(Person person) {
+        
+    }
+
     public MedicalFile getMedicalFile() {
         return medicalFile;
     }
@@ -20,5 +24,4 @@ public class Patient extends Person {
     public Doctor getResponsibleObserver() {
         return responsibleObserver;
     }
-    
 }

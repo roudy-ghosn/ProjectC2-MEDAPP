@@ -5,17 +5,18 @@ import java.util.Date;
 public class User {
 
     private String id;
-    private Person person;
+    private String person;
     private String username;
     private String password;
     private Date   creationDate;
-    private Role   role;
+    private String role;
+    private String action;
 
     public String getId() {
         return id;
     }
 
-    public Person getPerson() {
+    public String getPerson() {
         return person;
     }
 
@@ -31,7 +32,7 @@ public class User {
         return creationDate;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
@@ -39,7 +40,7 @@ public class User {
         this.id = id;
     }
 
-    public void setPerson(Person person) {
+    public void setPerson(String person) {
         this.person = person;
     }
 
@@ -55,8 +56,15 @@ public class User {
         this.creationDate = creationDate;
     }
 
-    public void setRole(Role role) {
+    public void setRole(String role) {
         this.role = role;
     }
 
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public String getAction() {
+        return action;
+    }
 }
