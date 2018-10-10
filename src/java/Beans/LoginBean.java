@@ -12,6 +12,14 @@ import javax.faces.context.FacesContext;
 @SessionScoped
 public class LoginBean {
 
+    public String getErrorText() {
+        return (String) JsfUtils.getExpressionValue("#{viewScope.errorText}");
+    }
+
+    public void setErrorText(String errorText) {
+        JsfUtils.setExpressionValue("#{viewScope.errorText}", errorText);
+    }
+
     public String getUsername() {
         return (String) JsfUtils.getExpressionValue("#{viewScope.username}");
     }
@@ -32,10 +40,7 @@ public class LoginBean {
         if (QueryUtils.validateLogin(getUsername(), getPassword())) {
             return "homepage";
         } else {
-            FacesContext.getCurrentInstance().addMessage(
-                    null,
-                    new FacesMessage(FacesMessage.SEVERITY_WARN,
-                            "Login Failed! Incorrect username/passowrd.", "Please try again."));
+            setErrorText("Login Failed! Incorrect username/passowrd, Please try again");
         }
         return null;
     }

@@ -48,15 +48,15 @@ public class SessionUtils {
         return getSession().getAttribute("role").toString();
     }
     
-    public boolean isUserAdmin(){
+    public static boolean isUserAdmin(){
         return "Administrator".equals(getRole());
     }
     
-    public boolean isUserDoctor(){
+    public static boolean isUserDoctor(){
         return "Doctor".equals(getRole());
     }
     
-    public boolean isUserPatient(){
+    public static boolean isUserPatient(){
         return "Patient".equals(getRole());
     }
 }

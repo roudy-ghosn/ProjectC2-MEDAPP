@@ -14,8 +14,8 @@
     <h:body>
         <ui:include src="common/header.html" />
 
-        <div class="middle">
-            <div style="text-align: right; margin-bottom: 20px;">
+        <div class="middle" id="body">
+            <div class="logoutDiv">
                 <f:view>
                     <h:form>
                         <h:commandLink action="#{loginBean.logout}" value="Logout"/>

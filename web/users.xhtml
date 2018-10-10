@@ -16,16 +16,21 @@
 
     <h:body>
         <ui:include src="common/header.html" />
-        <div class="middle">
+        
+        <div class="middle" id="body">
+            <div class="logoutDiv">
+                <f:view>
+                    <h:form>
+                        <h:commandLink action="#{loginBean.logout}" value="Logout"/>
+                    </h:form>
+                </f:view>
+            </div>
             <h:form>
-                <div style="text-align: right;" class="actionBar">
-                    <h:commandButton value="Add" action="#{usersBean.addNewUser()}" />
-                </div>
                 <h:dataTable id="users" value="#{usersBean.usersList}" var="user" headerClass="list-header" rowClasses="list-row" class="dataDisplay">
                     <h:column>
                         <f:facet name="header">Role</f:facet>
                         <h:selectOneMenu value="#{user.role}"  required="true">
-                            <f:selectItems value="#{usersBean.rolesList}" var="role" itemValue="#{role.id}" itemLabel="#{role.description}"/>
+                            <f:selectItems value="#{usersBean.rolesList}" var="role" itemValue="#{role.id}" itemLabel="#{role.id} #{role.description}"/>
                         </h:selectOneMenu>
                     </h:column>
                     <h:column>
@@ -48,11 +53,12 @@
                     </h:column>
                 </h:dataTable> 
                 <div style="text-align: right;" class="actionBar">
+                    <h:commandButton value="Add" action="#{usersBean.addNewUser()}" />
                     <h:commandButton value="Save" action="#{usersBean.save()}" />
                 </div>
             </h:form>
         </div>
-
+        
         <ui:include src="common/footer.html" />
     </h:body>
 </ui:composition>
