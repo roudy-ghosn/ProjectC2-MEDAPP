@@ -2,16 +2,14 @@
 
 ## Use Cases:
 
-![alt text](https://raw.githubusercontent.com/roudy-ghosn/ProjectC2-MEDAPP/master/web/Images/Admin.jpeg)
-
-![alt text](https://raw.githubusercontent.com/roudy-ghosn/ProjectC2-MEDAPP/master/web/Images/Medecin.jpeg)
-
-![alt text](https://raw.githubusercontent.com/roudy-ghosn/ProjectC2-MEDAPP/master/web/Images/Patient.jpeg)
-
-## Application Flow:
-
 - **Administrator** 
+
+![alt text](https://raw.githubusercontent.com/roudy-ghosn/ProjectC2-MEDAPP/master/web/Images/Admin.jpeg)
 
 - **Doctor**
 
+![alt text](https://raw.githubusercontent.com/roudy-ghosn/ProjectC2-MEDAPP/master/web/Images/Medecin.jpeg)
+
 - **Patient**
+
+![alt text](https://raw.githubusercontent.com/roudy-ghosn/ProjectC2-MEDAPP/master/web/Images/Patient.jpeg)
