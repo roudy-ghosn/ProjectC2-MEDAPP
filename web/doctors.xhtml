@@ -7,12 +7,23 @@
 
     <ui:define name="header">
         <title>MEDAPP - Doctors</title>
-<!--        <f:metadata>
-            <f:viewAction action="#{usersBean.onLoad}" />  
-        </f:metadata>-->
+        <f:metadata>
+            <f:viewAction action="#{doctorsBean.onLoad}" />  
+        </f:metadata>
     </ui:define>
 
     <ui:include src="common/style.html" />
+
+    <style>
+        label
+        {
+            font-weight: bold;
+        }
+        .inputHolder
+        {
+            margin-bottom: 6px;
+        }
+    </style>
 
     <h:body>
         <ui:include src="common/header.html" />
@@ -25,7 +36,73 @@
                     </h:form>
                 </f:view>
             </div>
-            <h2>Doctor ID: #{doctorsBean.doctorIdFromURL}</h2>
+
+            <!-- Specific Doctor Details --> 
+            <div style="display: #{doctorsBean.doctorDetailsRequested ? 'block' : 'none'}">
+                <h2 style="text-align: center; padding-top: 10px;">Doctor #{doctorsBean.doctor.firstName} #{doctorsBean.doctor.lastName} Information</h2>
+                <h:form styleClass="width: 100%;">
+                    <div class="inputHolder">
+                        <h:outputLabel value="Specialty: "/>
+                        <h:outputText value="#{doctorsBean.doctor.specialty}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Phone Number: "/>
+                        <h:outputText value="#{doctorsBean.doctor.phoneNumber}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Email: "/>
+                        <h:outputText value="#{doctorsBean.doctor.email}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Address: "/>
+                        <h:outputText value="#{doctorsBean.doctor.address}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Country: "/>
+                        <h:outputText value="#{doctorsBean.doctor.country}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Region: "/>
+                        <h:outputText value="#{doctorsBean.doctor.region}"/>
+                    </div>
+                </h:form>
+            </div>
+            <!--List of Doctors --> 
+            <div style="display: #{doctorsBean.doctorDetailsRequested ? 'none' : 'block'}">
+                <h3 style="text-align: center; padding-top: 10px;">List of doctors in the system</h3>
+                <h:dataTable id="reportTable" value="#{doctorsBean.allDoctorsList}" var="doctors" headerClass="list-header" rowClasses="list-row" class="dataDisplay">
+                    <h:column>
+                        <f:facet name="header">Full Name</f:facet>
+                        <a href="doctors.xhtml?doctorId=#{doctors.id}" target="_self">
+                            #{doctors.firstName} #{doctors.lastName}
+                        </a>
+                    </h:column> 
+                    <h:column>
+                        <f:facet name="header">Specialty</f:facet>
+                        <h:outputText value="#{doctors.specialty}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Phone Number</f:facet>
+                        <h:outputText value="#{doctors.phoneNumber}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Email</f:facet>
+                        <h:outputText value="#{doctors.email}"/>
+                    </h:column> 
+                    <h:column>
+                        <f:facet name="header">Address</f:facet>
+                        <h:outputText value="#{report.address}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Country</f:facet>
+                        <h:outputText value="#{report.country}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Region</f:facet>
+                        <h:outputText value="#{report.region}"/>
+                    </h:column>  
+                </h:dataTable>
+            </div>
         </div>
 
         <ui:include src="common/footer.html" />
