@@ -38,7 +38,7 @@ public class LoginBean {
 
     public String login() {
         if (QueryUtils.validateLogin(getUsername(), getPassword())) {
-            return "homepage";
+            return "homepage?faces-redirect=true";
         } else {
             setErrorText("Login Failed! Incorrect username/passowrd, Please try again");
         }

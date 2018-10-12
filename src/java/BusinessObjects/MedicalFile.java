@@ -15,10 +15,6 @@ public class MedicalFile {
         return id;
     }
 
-    public Doctor getDoctor() {
-        return doctor;
-    }
-
     public Date getCreationDate() {
         return creationDate;
     }
@@ -35,12 +31,16 @@ public class MedicalFile {
         this.id = id;
     }
 
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
     }
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
+    public Doctor getDoctor() {
+        return doctor;
     }
 
     public void setNotes(String notes) {

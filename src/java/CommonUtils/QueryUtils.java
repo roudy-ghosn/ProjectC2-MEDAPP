@@ -24,7 +24,7 @@ public class QueryUtils {
     private static Connection dbConnection = dbConfig.getConnection();
 
     public static boolean validateLogin(String username, String password) {
-        String query = "select Roles.Role_description role, Persons.Person_firstName firstname, Persons.Person_lastName lastname "
+        String query = "select Roles.Role_description role, Persons.Person_firstName firstname, Persons.Person_lastName lastname, Persons.Person_id "
                 + "from Users, Persons, Roles "
                 + "where lower(Users.User_userName) = lower(?) "
                 + "and lower(Users.User_passowrd) = lower(?) "
@@ -38,9 +38,10 @@ public class QueryUtils {
 
             if (result.next()) {
                 SessionUtils.setUserName(username);
-                SessionUtils.setFirstName(result.getString("firstname"));
-                SessionUtils.setLastName(result.getString("lastname"));
                 SessionUtils.setRole(result.getString("role"));
+                SessionUtils.setLastName(result.getString("lastname"));
+                SessionUtils.setFirstName(result.getString("firstname"));
+                SessionUtils.setLoggedPersonId(result.getString("Person_id"));
                 return true;
             }
         } catch (SQLException ex) {
@@ -186,8 +187,8 @@ public class QueryUtils {
     /* Manage Medical File */
     public static MedicalFile getPatientMedicalFile(String patientId) {
         MedicalFile file = new MedicalFile();
-        String query = "select MedicalFile_id, Doctor_id, MedicalFile_creationDate, MedicalFile_file, MedicalFile_note"
-                + "from MedicalFile where Patient_id = ?";
+        String query = "select MedicalFile_id, Doctor_id, MedicalFile_creationDate, MedicalFile_file, MedicalFile_note "
+                + " from MedicalFile where Patient_id = ?";
         try {
             statement = dbConnection.prepareStatement(query);
             statement.setString(1, patientId);
@@ -195,11 +196,11 @@ public class QueryUtils {
 
             if (result.next()) {
                 file.setId(result.getString("MedicalFile_id"));
-                file.setNotes(result.getString("MedicalFile_note"));
                 List<Doctor> doctors = getDoctorList(result.getString("Doctor_id"));
                 if (doctors != null && doctors.size() > 0) {
                     file.setDoctor(doctors.get(0));
                 }
+                file.setNotes(result.getString("MedicalFile_note"));
                 file.setReports(getMedicalFileListOfReports(file.getId()));
                 file.setCreationDate(result.getDate("MedicalFile_creationDate"));
             }
@@ -222,22 +223,19 @@ public class QueryUtils {
 
             while (result.next()) {
                 Report report = new Report();
-                report.setComments(result.getString("Report_comments"));
+                report.setId(result.getString("Report_id"));
                 report.setDate(result.getDate("Report_date"));
-                report.setDescription(result.getString("Report_description"));
+                report.setNotes(result.getString("Report_note"));
+                report.setTitle(result.getString("Report_titre"));
+                report.setDisease(result.getString("Disease_id"));
+                report.setComments(result.getString("Report_comments"));
+                report.setTreatment(result.getString("Report_treatment"));
                 report.setDiagnosis(result.getString("Report_diagnosis"));
-                List<Disease> diseases = getDiseaseList(result.getString("Disease_id"));
-                if (diseases != null && diseases.size() > 0) {
-                    report.setDisease(diseases.get(0));
-                }
+                report.setDescription(result.getString("Report_description"));
                 List<Doctor> doctors = getDoctorList(result.getString("Doctor_id"));
                 if (doctors != null && doctors.size() > 0) {
                     report.setDoctor(doctors.get(0));
                 }
-                report.setId(result.getString("Report_id"));
-                report.setNotes(result.getString("Report_note"));
-                report.setTitle(result.getString("Report_titre"));
-                report.setTreatment(result.getString("Report_treatment"));
                 reportList.add(report);
             }
         } catch (SQLException ex) {
@@ -277,15 +275,15 @@ public class QueryUtils {
         String query = "select Person_id, Person_firstName, Person_lastName, Person_age, Person_phoneNumber"
                 + ", Person_email, Person_fatherName, Person_motherName, Person_isMarried, Person_gender"
                 + ", Person_hasChildren, Person_address, Person_country, Person_region, Person_zipCode "
-                + ", Person_ln, Person_lg, Person_specialty "
+                + ", Person_ln, Person_lg, Doctor_specialty "
                 + "from Persons "
                 + "where ((Person_id = ? and ? is not null) or ? is null) "
-                + "and Person_type = 'D'";
+                + "and Person_type = 'M'";
         try {
             statement = dbConnection.prepareStatement(query);
             statement.setString(1, doctorId);
-            statement.setString(1, doctorId);
-            statement.setString(1, doctorId);
+            statement.setString(2, doctorId);
+            statement.setString(3, doctorId);
             ResultSet result = statement.executeQuery();
 
             while (result.next()) {
@@ -302,7 +300,7 @@ public class QueryUtils {
                 doctor.setCountry(result.getString("Person_country"));
                 doctor.setLastName(result.getString("Person_lastName"));
                 doctor.setFirstName(result.getString("Person_firstName"));
-                doctor.setSpecialty(result.getString("Person_specialty"));
+                doctor.setSpecialty(result.getString("Doctor_specialty"));
                 doctor.setMotherName(result.getString("Person_motherName"));
                 doctor.setFatherName(result.getString("Person_fatherName"));
                 doctor.setPhoneNumber(result.getString("Person_phoneNumber"));

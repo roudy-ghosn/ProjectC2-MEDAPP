@@ -47,6 +47,14 @@ public class SessionUtils {
     public static String getRole() {
         return getSession().getAttribute("role").toString();
     }
+
+    public static void setLoggedPersonId(String loggedPersonId) {
+        getSession().setAttribute("loggedPersonId", loggedPersonId);
+    }
+
+    public static String getLoggedPersonId() {
+        return getSession().getAttribute("loggedPersonId").toString();
+    }
     
     public static boolean isUserAdmin(){
         return "Administrator".equals(getRole());

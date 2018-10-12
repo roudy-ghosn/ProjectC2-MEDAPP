@@ -5,23 +5,19 @@ import java.util.Date;
 public class Report {
 
     private String id;
-    private Doctor doctor;
+    private Date   date;
     private String title;
-    private String description;
-    private String attachment;
     private String notes;
+    private Doctor doctor;
+    private String disease;
+    private String comments;
     private String diagnosis;
     private String treatment;
-    private String comments;
-    private Date   date;
-    private Disease disease;
+    private String attachment;
+    private String description;
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
     }
 
     public void setTitle(String title) {
@@ -55,17 +51,8 @@ public class Report {
     public void setDate(Date date) {
         this.date = date;
     }
-
-    public void setDisease(Disease disease) {
-        this.disease = disease;
-    }
-
     public String getId() {
         return id;
-    }
-
-    public Doctor getDoctor() {
-        return doctor;
     }
 
     public String getTitle() {
@@ -100,9 +87,19 @@ public class Report {
         return date;
     }
 
-    public Disease getDisease() {
+    public void setDisease(String disease) {
+        this.disease = disease;
+    }
+
+    public String getDisease() {
         return disease;
     }
 
-    
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
 }
