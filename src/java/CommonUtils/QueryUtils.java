@@ -10,6 +10,7 @@ import BusinessObjects.Role;
 import BusinessObjects.User;
 import DataBase.DBConfig;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -124,7 +125,7 @@ public class QueryUtils {
     /* Manage Persons */
     public static List<Person> getPersonList(String filter) {
         List<Person> personsList = new ArrayList<Person>();
-        String query = "select Person_id, Person_firstName, Person_lastName, Person_age, Person_phoneNumber"
+        String query = "select Person_id, Person_firstName, Person_lastName, Person_dob, Person_phoneNumber"
                 + ", Person_email, Person_fatherName, Person_motherName, Person_isMarried, Person_gender"
                 + ", Person_hasChildren, Person_address, Person_country, Person_region, Person_zipCode "
                 + "from Persons "
@@ -140,7 +141,7 @@ public class QueryUtils {
                 Person person = new Person();
                 person.setId(result.getString("Person_id"));
                 person.setAddress(result.getString("Person_address"));
-                person.setAge(result.getString("Person_age"));
+                person.setDateOfBirth(result.getDate("Person_dob"));
                 person.setCountry(result.getString("Person_country"));
                 person.setEmail(result.getString("Person_email"));
                 person.setFatherName(result.getString("Person_fatherName"));
@@ -159,6 +160,61 @@ public class QueryUtils {
             ex.printStackTrace();
         }
         return personsList;
+    }
+
+    public static void deleteDoctor(String doctorId) {
+        String query = "delete from Persons where Person_id = ?";
+        try {
+            statement = dbConnection.prepareStatement(query);
+            statement.setString(1, doctorId);
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void insertDoctor(Doctor doctor) {
+        String query = "Insert into Persons(Person_id, Person_firstName, Person_lastName, Person_dob"
+                + ", Person_phoneNumber, Person_email, Person_address, Person_country, Person_region"
+                + ", Person_type, Doctor_specialty) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 'M', ?)";
+        try {
+            statement = dbConnection.prepareStatement(query);
+            statement.setString(1, UUID.randomUUID().toString());
+            statement.setString(2, doctor.getFirstName());
+            statement.setString(3, doctor.getLastName());
+            statement.setDate(4, (Date) doctor.getDateOfBirth());
+            statement.setString(5, doctor.getPhoneNumber());
+            statement.setString(6, doctor.getEmail());
+            statement.setString(7, doctor.getAddress());
+            statement.setString(8, doctor.getCountry());
+            statement.setString(9, doctor.getRegion());
+            statement.setString(10, doctor.getSpecialty());
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void updateDoctor(Doctor doctor) {
+        String query = "Update Persons set Person_firstName = ?, Person_lastName = ?, Person_dob = ?"
+                + ", Person_phoneNumber = ?, Person_email = ?, Person_address = ?, Person_country = ?"
+                + ", Person_region = ?, Doctor_specialty Where Person_id = ?";
+        try {
+            statement = dbConnection.prepareStatement(query);
+            statement.setString(1, doctor.getFirstName());
+            statement.setString(2, doctor.getLastName());
+            statement.setDate(3, (Date) doctor.getDateOfBirth());
+            statement.setString(4, doctor.getPhoneNumber());
+            statement.setString(5, doctor.getEmail());
+            statement.setString(6, doctor.getAddress());
+            statement.setString(7, doctor.getCountry());
+            statement.setString(8, doctor.getRegion());
+            statement.setString(9, doctor.getSpecialty());
+            statement.setString(10, doctor.getId());
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
     /* Manage Roles */
@@ -272,7 +328,7 @@ public class QueryUtils {
 
     public static List<Doctor> getDoctorList(String doctorId) {
         List<Doctor> doctorsList = new ArrayList<Doctor>();
-        String query = "select Person_id, Person_firstName, Person_lastName, Person_age, Person_phoneNumber"
+        String query = "select Person_id, Person_firstName, Person_lastName, Person_dob, Person_phoneNumber"
                 + ", Person_email, Person_fatherName, Person_motherName, Person_isMarried, Person_gender"
                 + ", Person_hasChildren, Person_address, Person_country, Person_region, Person_zipCode "
                 + ", Person_ln, Person_lg, Doctor_specialty "
@@ -291,10 +347,10 @@ public class QueryUtils {
                 doctor.setId(result.getString("Person_id"));
                 doctor.setLg(result.getString("Person_lg"));
                 doctor.setLn(result.getString("Person_ln"));
-                doctor.setAge(result.getString("Person_age"));
                 doctor.setEmail(result.getString("Person_email"));
                 doctor.setGender(result.getString("Person_gender"));
                 doctor.setRegion(result.getString("Person_region"));
+                doctor.setDateOfBirth(result.getDate("Person_dob"));
                 doctor.setZipCode(result.getString("Person_zipCode"));
                 doctor.setAddress(result.getString("Person_address"));
                 doctor.setCountry(result.getString("Person_country"));

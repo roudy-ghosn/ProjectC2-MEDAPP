@@ -1,11 +1,13 @@
 package BusinessObjects;
 
+import java.util.Date;
+
 public class Person {
     
     private String id;
     private String firstName;
     private String lastName;
-    private String age;
+    private Date dateOfBirth;
     private String gender;
     private String phoneNumber;
     private String email;
@@ -17,6 +19,7 @@ public class Person {
     private String country;
     private String region;
     private String zipCode;
+    private String action;
 
     public String getId() {
         return id;
@@ -36,10 +39,6 @@ public class Person {
     
     public String getLastName() {
         return lastName;
-    }
-
-    public String getAge() {
-        return age;
     }
 
     public String getPhoneNumber() {
@@ -94,10 +93,6 @@ public class Person {
         this.lastName = lastName;
     }
 
-    public void setAge(String age) {
-        this.age = age;
-    }
-
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
@@ -136,5 +131,21 @@ public class Person {
 
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 }

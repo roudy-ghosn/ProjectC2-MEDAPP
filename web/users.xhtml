@@ -25,6 +25,7 @@
                     </h:form>
                 </f:view>
             </div>
+            <h3 style="text-align: center; padding-top: 10px;">List of users in the system</h3>
             <h:form>
                 <h:dataTable id="users" value="#{usersBean.usersList}" var="user" headerClass="list-header" rowClasses="list-row" class="dataDisplay">
                     <h:column>
@@ -48,11 +49,10 @@
                         <h:inputText value="#{user.password}"/>
                     </h:column>
                     <h:column>
-                        <f:facet name="header">Actions</f:facet>
                         <h:commandLink value="Delete" action="#{usersBean.deleteUser(user.id)}" />
                     </h:column>
                 </h:dataTable> 
-                <div style="text-align: right;" class="actionBar">
+                <div class="actionBar">
                     <h:commandButton value="Add" action="#{usersBean.addNewUser()}" />
                     <h:commandButton value="Save" action="#{usersBean.save()}" />
                 </div>

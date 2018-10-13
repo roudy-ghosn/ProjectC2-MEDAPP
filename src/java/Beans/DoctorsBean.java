@@ -5,6 +5,8 @@ import CommonUtils.QueryUtils;
 import CommonUtils.SessionUtils;
 import com.mysql.jdbc.StringUtils;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -15,6 +17,7 @@ public class DoctorsBean {
 
     private Doctor doctor;
     private List<Doctor> allDoctorsList;
+    private List<Doctor> deletedDoctorsList;
 
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
@@ -30,6 +33,14 @@ public class DoctorsBean {
     
     public List<Doctor> getAllDoctorsList() {
         return allDoctorsList;
+    }
+
+    public List<Doctor> getDeletedDoctorsList() {
+        return deletedDoctorsList;
+    }
+
+    public void setDeletedDoctorsList(List<Doctor> deletedDoctorsList) {
+        this.deletedDoctorsList = deletedDoctorsList;
     }
 
     public DoctorsBean() {
@@ -62,5 +73,37 @@ public class DoctorsBean {
         } else {
             getAllDoctorsList(null);
         }
+    }
+
+    public void addNewDoctor() {
+        Doctor newDoctor = new Doctor();
+        newDoctor.setAction("C");
+        allDoctorsList.add(newDoctor);
+    }
+
+    public void deleteDoctor(String doctorId) {
+        Iterator<Doctor> doctorIterator = getAllDoctorsList().iterator();
+        while (doctorIterator.hasNext()) {
+            Doctor doc = doctorIterator.next();
+
+            if (doctorId.equals(doc.getId())) {
+                deletedDoctorsList.add(doc);
+                doctorIterator.remove();
+            }
+        }
+    }
+
+    public void save() {
+        for (Doctor doc : getDeletedDoctorsList()) {
+            QueryUtils.deleteDoctor(doc.getId());
+        }
+        for (Doctor doc : getAllDoctorsList()) {
+            if ("C".equals(doc.getAction())) {
+                QueryUtils.insertDoctor(doc);
+            } else {
+                QueryUtils.updateDoctor(doc);
+            }
+        }
+        getAllDoctorsList(null);
     }
 }
