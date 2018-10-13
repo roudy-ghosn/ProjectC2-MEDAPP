@@ -59,7 +59,7 @@
                     </div>
                     <div class="inputHolder">
                         <h:outputLabel value="Medical File Notes: "/>
-                        <h:outputText value="#{medicalFile.notes}"/>
+                        <h:outputText value="#{homePageBean.medicalFile.notes}"/>
                     </div>
                 </h:form>
                 <br/>
@@ -91,6 +91,45 @@
                     </h:column> 
                 </h:dataTable> 
             </div>
+            
+            <div id="doctorDiv" style="display: #{managedBeanBase.loggedInUserDoctor ? 'block' : 'none'}">
+                <h:form styleClass="width: 100%;">
+                    <div class="inputHolder">
+                        <h:outputLabel value="Today's Appointments #{homePageBean.todayDate}"/>
+                    </div>
+                </h:form>
+                <br/>
+                <!--List of Related Report--> 
+                <h:dataTable id="appointmentTable" value="#{homePageBean.appointmentList}" var="appList" headerClass="list-header" rowClasses="list-row" class="dataDisplay">
+                    <h:column>
+                        <f:facet name="header">Appointment Id</f:facet>
+                        <h:outputText value="#{appList.id}"/>
+                    </h:column> 
+                    <h:column>
+                        <f:facet name="header">Appointment Time</f:facet>
+                        <h:outputText value="#{appList.time}" >
+                        </h:outputText>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Patient</f:facet>
+                        <a href="patients.xhtml?patientId=#{appList.patient.id}" target="_self">
+                            #{appList.patient.firstName} #{appList.patient.lastName}
+                        </a>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Notes</f:facet>
+                        <h:outputText value="#{appList.notes}"/>
+                    </h:column> 
+                </h:dataTable> 
+            </div>
+            <div class="gotoCalendarDiv">
+                <f:view>
+                    <h:form>
+                       <a href="Schedule.xhtml" target="_self">Go to schedule</a>
+                    </h:form>
+                </f:view>
+            </div>
+
         </div>
 
         <ui:include src="common/footer.html" />
