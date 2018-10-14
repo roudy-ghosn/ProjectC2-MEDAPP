@@ -1,5 +1,6 @@
 package CommonUtils;
 
+import BusinessObjects.Appointment;
 import BusinessObjects.Disease;
 import BusinessObjects.Doctor;
 import BusinessObjects.MedicalFile;
@@ -369,4 +370,81 @@ public class QueryUtils {
         }
         return doctorsList;
     }
+    public static List<Patient> getPatientList(String patientId) {
+        List<Patient> patientList = new ArrayList<Patient>();
+        String query = "select Person_id, Person_firstName, Person_lastName, Person_dob, Person_phoneNumber"
+                + ", Person_email, Person_fatherName, Person_motherName, Person_isMarried, Person_gender"
+                + ", Person_hasChildren, Person_address, Person_country, Person_region, Person_zipCode, Patient_respObsv "
+                + "from Persons "
+                + "where ((Person_id = ? and ? is not null) or ? is null) "
+                + "and Person_type = 'P'";
+        try {
+            statement = dbConnection.prepareStatement(query);
+            statement.setString(1, patientId);
+            statement.setString(2, patientId);
+            statement.setString(3, patientId);
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                Patient patient = new Patient();
+                patient.setId(result.getString("Person_id"));
+                patient.setEmail(result.getString("Person_email"));
+                patient.setGender(result.getString("Person_gender"));
+                patient.setRegion(result.getString("Person_region"));
+                patient.setDateOfBirth(result.getDate("Person_dob"));
+                patient.setZipCode(result.getString("Person_zipCode"));
+                patient.setAddress(result.getString("Person_address"));
+                patient.setCountry(result.getString("Person_country"));
+                patient.setLastName(result.getString("Person_lastName"));
+                patient.setFirstName(result.getString("Person_firstName"));
+                patient.setMotherName(result.getString("Person_motherName"));
+                patient.setFatherName(result.getString("Person_fatherName"));
+                patient.setPhoneNumber(result.getString("Person_phoneNumber"));
+                patient.setIsMaried("O".equals(result.getString("Person_isMarried")) ? true : false);
+                patient.setHasChildren("O".equals(result.getString("Person_hasChildren")) ? true : false);
+                patient.setResponsibleObserver(result.getString("Patient_respObsv"));
+                patientList.add(patient);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return patientList;
+    }
+
+    public static List<Appointment> getAppointmentList(String doctorId){
+        List<Appointment> appointmentList = new ArrayList<Appointment>();
+         String query = "select Appoitment_id, Doctor_id, Patient_id, Appoitment_date, Appoitment_time, Appoitment_note "
+                + "from Appointment "
+                + "where (Doctor_id = ? "
+                + "and Appoitment_date = '" + java.time.LocalDate.now() + "')";
+         try {
+            statement = dbConnection.prepareStatement(query);
+            statement.setString(1, doctorId);
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                Appointment appointment = new Appointment();
+                appointment.setId(result.getString("Appoitment_id"));
+                List<Doctor> doctors = getDoctorList(result.getString("Doctor_id"));
+                if (doctors != null && doctors.size() > 0) {
+                    appointment.setDoctor(doctors.get(0));
+                }
+                List<Patient> patients = getPatientList(result.getString("Patient_id"));
+                if (patients != null && patients.size() > 0) {
+                    appointment.setPatient(patients.get(0));
+                }
+                appointment.setDate(result.getDate("Appoitment_date"));
+                appointment.setTime(result.getString("Appoitment_time"));
+                appointment.setNotes(result.getString("Appoitment_note"));
+                appointmentList.add(appointment);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+         System.out.println(appointmentList);
+        return appointmentList;
+
+
+    }
+    
 }
