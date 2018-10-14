@@ -3,9 +3,8 @@ package Beans;
 import BusinessObjects.Doctor;
 import CommonUtils.QueryUtils;
 import CommonUtils.SessionUtils;
-import com.mysql.jdbc.StringUtils;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -13,7 +12,7 @@ import javax.faces.bean.ViewScoped;
 
 @ManagedBean
 @ViewScoped
-public class DoctorsBean {
+public class DoctorsBean implements Serializable {
 
     private Doctor doctor;
     private List<Doctor> allDoctorsList;
@@ -30,7 +29,7 @@ public class DoctorsBean {
     public Doctor getDoctor() {
         return doctor;
     }
-    
+
     public List<Doctor> getAllDoctorsList() {
         return allDoctorsList;
     }
@@ -44,16 +43,16 @@ public class DoctorsBean {
     }
 
     public DoctorsBean() {
-        doctor = new Doctor();
         allDoctorsList = new ArrayList<Doctor>();
+        deletedDoctorsList = new ArrayList<Doctor>();
     }
-    
+
     public String getDoctorIdFromURL() {
         return SessionUtils.getRequest().getParameter("doctorId");
     }
 
     public boolean isDoctorDetailsRequested() {
-        return !StringUtils.isEmptyOrWhitespaceOnly(getDoctorIdFromURL());
+        return getDoctorIdFromURL() != null;
     }
 
     public void getSpecifiedDoctorDetails(String id) {
@@ -94,16 +93,20 @@ public class DoctorsBean {
     }
 
     public void save() {
-        for (Doctor doc : getDeletedDoctorsList()) {
-            QueryUtils.deleteDoctor(doc.getId());
-        }
-        for (Doctor doc : getAllDoctorsList()) {
-            if ("C".equals(doc.getAction())) {
-                QueryUtils.insertDoctor(doc);
-            } else {
-                QueryUtils.updateDoctor(doc);
+        if (doctor != null) {
+            QueryUtils.updateDoctor(doctor);
+        } else {
+            for (Doctor doc : getDeletedDoctorsList()) {
+                QueryUtils.deleteDoctor(doc.getId());
             }
+            for (Doctor doc : getAllDoctorsList()) {
+                if ("C".equals(doc.getAction())) {
+                    QueryUtils.insertDoctor(doc);
+                } else {
+                    QueryUtils.updateDoctor(doc);
+                }
+            }
+            getAllDoctorsList(null);
         }
-        getAllDoctorsList(null);
     }
 }

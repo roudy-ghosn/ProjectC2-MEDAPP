@@ -5,13 +5,14 @@ import CommonUtils.SessionUtils;
 import javax.faces.bean.ManagedBean;
 import BusinessObjects.MedicalFile;
 import CommonUtils.QueryUtils;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import javax.faces.bean.ViewScoped;
 
 @ManagedBean
 @ViewScoped
-public class HomePageBean {
+public class HomePageBean implements Serializable {
 
     private MedicalFile medicalFile;
     private List<Appointment> appointmentList;

@@ -4,6 +4,7 @@ import BusinessObjects.Person;
 import BusinessObjects.Role;
 import BusinessObjects.User;
 import CommonUtils.QueryUtils;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -13,7 +14,7 @@ import javax.faces.bean.ViewScoped;
 
 @ManagedBean
 @ViewScoped
-public class UsersBean {
+public class UsersBean implements Serializable {
 
     private List<User> usersList;
     private List<User> deletedUsersList;

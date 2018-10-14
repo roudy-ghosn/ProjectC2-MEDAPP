@@ -1,9 +1,10 @@
 package BusinessObjects;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class MedicalFile {
+public class MedicalFile implements Serializable {
     
     private String id;
     private Doctor doctor;

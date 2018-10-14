@@ -1,12 +1,13 @@
 package Beans;
 
 import CommonUtils.SessionUtils;
+import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 @ManagedBean
 @SessionScoped
-public class ManagedBeanBase {
+public class ManagedBeanBase implements Serializable {
 
     public boolean isLoggedInUserAdmin() {
         return SessionUtils.isUserAdmin();

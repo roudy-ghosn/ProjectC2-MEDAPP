@@ -3,6 +3,7 @@ package Beans;
 import CommonUtils.JsfUtils;
 import CommonUtils.QueryUtils;
 import CommonUtils.SessionUtils;
+import java.io.Serializable;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -10,7 +11,7 @@ import javax.faces.context.FacesContext;
 
 @ManagedBean
 @SessionScoped
-public class LoginBean {
+public class LoginBean implements Serializable {
 
     public String getErrorText() {
         return (String) JsfUtils.getExpressionValue("#{viewScope.errorText}");

@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
     <ui:define name="header">
         <title>MEDAPP - Doctors</title>
@@ -17,11 +18,16 @@
     <style>
         label
         {
+            width: 150px;
             font-weight: bold;
+            display: inline-block;
         }
         .inputHolder
         {
+            width: 50%;
+            font-size: 15px;
             margin-bottom: 6px;
+            display: inline-block;
         }
     </style>
 
@@ -38,38 +44,38 @@
             </div>
 
             <!-- Specific Doctor Details --> 
-            <div style="display: #{doctorsBean.doctorDetailsRequested ? 'block' : 'none'}">
-                <h2 style="text-align: center; padding: 10px 0 30px 0;">Doctor #{doctorsBean.doctor.firstName} #{doctorsBean.doctor.lastName} Information</h2>
+            <div style="font-size: 0px; display: #{doctorsBean.doctorDetailsRequested ? 'block' : 'none'}">
                 <h:form styleClass="width: 100%;">
+                    <h2 style="font-size: 22px; text-align: center; padding: 10px 0 30px 0;">Doctor #{doctorsBean.doctor.firstName} #{doctorsBean.doctor.lastName} Information</h2>
                     <div class="inputHolder">
                         <h:outputLabel value="Specialty: "/>
-                        <h:outputText value="#{doctorsBean.doctor.specialty}"/>
+                        <h:inputText value="#{doctorsBean.doctor.specialty}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
                     </div>
                     <div class="inputHolder">
                         <h:outputLabel value="Phone Number: "/>
-                        <h:outputText value="#{doctorsBean.doctor.phoneNumber}"/>
+                        <h:inputText value="#{doctorsBean.doctor.phoneNumber}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
                     </div>
                     <div class="inputHolder">
                         <h:outputLabel value="Email: "/>
-                        <h:outputText value="#{doctorsBean.doctor.email}"/>
+                        <h:inputText value="#{doctorsBean.doctor.email}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
                     </div>
                     <div class="inputHolder">
                         <h:outputLabel value="Address: "/>
-                        <h:outputText value="#{doctorsBean.doctor.address}"/>
+                        <h:inputText value="#{doctorsBean.doctor.address}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
                     </div>
                     <div class="inputHolder">
                         <h:outputLabel value="Country: "/>
-                        <h:outputText value="#{doctorsBean.doctor.country}"/>
+                        <h:inputText value="#{doctorsBean.doctor.country}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
                     </div>
                     <div class="inputHolder">
                         <h:outputLabel value="Region: "/>
-                        <h:outputText value="#{doctorsBean.doctor.region}"/>
+                        <h:inputText value="#{doctorsBean.doctor.region}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
                     </div>
                 </h:form>
             </div>
             <!--List of Doctors --> 
             <div style="display: #{doctorsBean.doctorDetailsRequested ? 'none' : 'block'}">
-                <h:form styleClass="width: 100%;">
+                <h:form>
                     <h3 style="text-align: center; padding-top: 10px;">List of doctors in the system</h3>
                     <h:dataTable id="reportTable" value="#{doctorsBean.allDoctorsList}" var="doctors" headerClass="list-header" rowClasses="list-row" class="dataDisplay">
                         <h:column>
@@ -78,52 +84,54 @@
                         </h:column>
                         <h:column>
                             <f:facet name="header">First Name</f:facet>
-                            <h:inputText value="#{doctors.firstName}" readonly="#{!managedBeanBase.loggedInUserAdmin}"/>
+                            <h:inputText value="#{doctors.firstName}" disabled="#{!managedBeanBase.loggedInUserAdmin}" />
                         </h:column>
                         <h:column>
                             <f:facet name="header">Last Name</f:facet>
-                            <h:inputText value="#{doctors.lastName}" readonly="#{!managedBeanBase.loggedInUserAdmin}"/>
+                            <h:inputText value="#{doctors.lastName}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">DOB</f:facet>
-                            <h:inputText value="#{doctors.dateOfBirth}" readonly="#{!managedBeanBase.loggedInUserAdmin}">  
-                                <f:convertDateTime pattern="DD-MM-YYYY"/>  
+                            <h:inputText value="#{doctors.dateOfBirth}">
+                                <f:convertDateTime pattern="dd.MM.yyyy" />
                             </h:inputText>
                         </h:column>
                         <h:column>
                             <f:facet name="header">Specialty</f:facet>
-                            <h:inputText value="#{doctors.specialty}" readonly="#{!managedBeanBase.loggedInUserAdmin}"/>
+                            <h:inputText value="#{doctors.specialty}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
                         </h:column>
                         <h:column>
-                            <f:facet name="header">Phone Number</f:facet>
-                            <h:inputText value="#{doctors.phoneNumber}" readonly="#{!managedBeanBase.loggedInUserAdmin}"/>
+                            <f:facet name="header">Tel</f:facet>
+                            <h:inputText value="#{doctors.phoneNumber}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">Email</f:facet>
-                            <h:inputText value="#{doctors.email}" readonly="#{!managedBeanBase.loggedInUserAdmin}"/>
+                            <h:inputText value="#{doctors.email}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
                         </h:column> 
                         <h:column>
                             <f:facet name="header">Address</f:facet>
-                            <h:inputText value="#{doctors.address}" readonly="#{!managedBeanBase.loggedInUserAdmin}"/>
+                            <h:inputText value="#{doctors.address}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">Country</f:facet>
-                            <h:inputText value="#{doctors.country}" readonly="#{!managedBeanBase.loggedInUserAdmin}"/>
+                            <h:inputText value="#{doctors.country}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">Region</f:facet>
-                            <h:inputText value="#{doctors.region}" readonly="#{!managedBeanBase.loggedInUserAdmin}"/>
+                            <h:inputText value="#{doctors.region}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
                         </h:column>
                         <h:column rendered="#{managedBeanBase.loggedInUserAdmin}">
                             <h:commandLink value="Delete" action="#{doctorsBean.deleteDoctor(doctors.id)}" />
                         </h:column>
-                    </h:dataTable> 
-                    <div class="actionBar" style="display: #{managedBeanBase.loggedInUserAdmin ? 'block' : 'none'}">
-                        <h:commandButton value="Add" action="#{doctorsBean.addNewDoctor()}" />
-                        <h:commandButton value="Save" action="#{doctorsBean.save()}" />
-                    </div>
+                    </h:dataTable>
                 </h:form>
             </div>
+            <h:form>
+                <div class="actionBar" style="display: #{managedBeanBase.loggedInUserAdmin ? 'block' : 'none'}">
+                    <h:commandButton value="Add" action="#{doctorsBean.addNewDoctor()}" rendered="#{!doctorsBean.doctorDetailsRequested}" />
+                    <h:commandButton value="Save" action="#{doctorsBean.save()}" />
+                </div>
+            </h:form>
         </div>
 
         <ui:include src="common/footer.html" />

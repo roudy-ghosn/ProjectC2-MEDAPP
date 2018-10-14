@@ -180,10 +180,10 @@ public class QueryUtils {
                 + ", Person_type, Doctor_specialty) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 'M', ?)";
         try {
             statement = dbConnection.prepareStatement(query);
-            statement.setString(1, UUID.randomUUID().toString());
+            statement.setInt(1, UUID.randomUUID().hashCode());
             statement.setString(2, doctor.getFirstName());
             statement.setString(3, doctor.getLastName());
-            statement.setDate(4, (Date) doctor.getDateOfBirth());
+            statement.setDate(4, new Date(doctor.getDateOfBirth().getTime()));
             statement.setString(5, doctor.getPhoneNumber());
             statement.setString(6, doctor.getEmail());
             statement.setString(7, doctor.getAddress());
@@ -199,12 +199,12 @@ public class QueryUtils {
     public static void updateDoctor(Doctor doctor) {
         String query = "Update Persons set Person_firstName = ?, Person_lastName = ?, Person_dob = ?"
                 + ", Person_phoneNumber = ?, Person_email = ?, Person_address = ?, Person_country = ?"
-                + ", Person_region = ?, Doctor_specialty Where Person_id = ?";
+                + ", Person_region = ?, Doctor_specialty = ? Where Person_id = ?";
         try {
             statement = dbConnection.prepareStatement(query);
             statement.setString(1, doctor.getFirstName());
             statement.setString(2, doctor.getLastName());
-            statement.setDate(3, (Date) doctor.getDateOfBirth());
+            statement.setDate(3, new Date(doctor.getDateOfBirth().getTime()));
             statement.setString(4, doctor.getPhoneNumber());
             statement.setString(5, doctor.getEmail());
             statement.setString(6, doctor.getAddress());
@@ -443,8 +443,5 @@ public class QueryUtils {
         }
          System.out.println(appointmentList);
         return appointmentList;
-
-
-    }
-    
+    }    
 }
