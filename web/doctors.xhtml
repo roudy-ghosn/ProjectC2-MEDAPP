@@ -46,7 +46,7 @@
             <!-- Specific Doctor Details --> 
             <div style="font-size: 0px; display: #{doctorsBean.doctorDetailsRequested ? 'block' : 'none'}">
                 <h:form styleClass="width: 100%;">
-                    <h2 style="font-size: 22px; text-align: center; padding: 10px 0 30px 0;">Doctor #{doctorsBean.doctor.firstName} #{doctorsBean.doctor.lastName} Information</h2>
+                    <h2 style="font-size: 22px; text-align: center; padding: 0 0 30px 0;">Doctor #{doctorsBean.doctor.firstName} #{doctorsBean.doctor.lastName} Information</h2>
                     <div class="inputHolder">
                         <h:outputLabel value="Specialty: "/>
                         <h:inputText value="#{doctorsBean.doctor.specialty}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
@@ -92,7 +92,7 @@
                         </h:column>
                         <h:column>
                             <f:facet name="header">DOB</f:facet>
-                            <h:inputText value="#{doctors.dateOfBirth}">
+                            <h:inputText value="#{doctors.dateOfBirth}" disabled="#{!managedBeanBase.loggedInUserAdmin}">
                                 <f:convertDateTime pattern="dd.MM.yyyy" />
                             </h:inputText>
                         </h:column>

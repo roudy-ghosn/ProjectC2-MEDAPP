@@ -91,15 +91,15 @@
                     </h:column> 
                 </h:dataTable> 
             </div>
-            
+
             <div id="doctorDiv" style="display: #{managedBeanBase.loggedInUserDoctor ? 'block' : 'none'}">
                 <h:form styleClass="width: 100%;">
                     <div class="inputHolder">
-                        <h:outputLabel value="Today's Appointments #{homePageBean.todayDate}"/>
+                        <h:outputLabel value="Today's Appointments #{homePageBean.todaysDate}"/>
                     </div>
                 </h:form>
                 <br/>
-                <!--List of Related Report--> 
+                <!--List of Related Appointments --> 
                 <h:dataTable id="appointmentTable" value="#{homePageBean.appointmentList}" var="appList" headerClass="list-header" rowClasses="list-row" class="dataDisplay">
                     <h:column>
                         <f:facet name="header">Appointment Id</f:facet>
@@ -120,17 +120,15 @@
                         <f:facet name="header">Notes</f:facet>
                         <h:outputText value="#{appList.notes}"/>
                     </h:column> 
-                </h:dataTable> 
-            </div>
-            <div class="gotoCalendarDiv">
-                <f:view>
-                    <h:form>
-                       <a href="Schedule.xhtml" target="_self">Go to schedule</a>
-                    </h:form>
-                </f:view>
-            </div>
-
-            
+                </h:dataTable>
+                <div class="actionBar">
+                    <f:view>
+                        <h:form>
+                            <a href="schedule.xhtml" target="_self">view schedule</a>
+                        </h:form>
+                    </f:view>
+                </div>
+            </div>            
         </div>
 
         <ui:include src="common/footer.html" />

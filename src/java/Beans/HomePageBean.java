@@ -16,13 +16,11 @@ public class HomePageBean implements Serializable {
 
     private MedicalFile medicalFile;
     private List<Appointment> appointmentList;
-    private LocalDate today;
 
     public MedicalFile getMedicalFile() {
         System.out.println(medicalFile);
         return medicalFile;
     }
-    
 
     public void setMedicalFile(MedicalFile medicalFile) {
         this.medicalFile = medicalFile;
@@ -37,21 +35,21 @@ public class HomePageBean implements Serializable {
     }
 
     public void onLoad() {
-        getTodaysDate();
-        if(SessionUtils.isUserPatient()){
-        getPatientMedicalFile();
-        } else if(SessionUtils.isUserDoctor()){
-        getTodayAppointment();
+        if (SessionUtils.isUserPatient()) {
+            getPatientMedicalFile();
+        } else if (SessionUtils.isUserDoctor()) {
+            getTodayAppointment();
         }
     }
 
     public String getUserFullname() {
         return SessionUtils.getFirstName() + " " + SessionUtils.getLastName();
     }
-    public void getTodayAppointment(){
+
+    public void getTodayAppointment() {
         setAppointmentList(QueryUtils.getAppointmentList(SessionUtils.getLoggedPersonId()));
-        
     }
+
     public List<Appointment> getAppointmentList() {
         return appointmentList;
     }
@@ -59,16 +57,8 @@ public class HomePageBean implements Serializable {
     public void setAppointmentList(List<Appointment> appointmentList) {
         this.appointmentList = appointmentList;
     }
-    
-    public LocalDate getTodayDate(){
-        return today;
-    }
-    public void setTodayDate(LocalDate d){
-        
-        this.today = d;
-    }  
-    
-    public void getTodaysDate(){
-        setTodayDate(java.time.LocalDate.now());
+
+    public LocalDate getTodaysDate() {
+        return LocalDate.now();
     }
 }

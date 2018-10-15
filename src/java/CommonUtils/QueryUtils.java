@@ -138,7 +138,7 @@ public class QueryUtils {
             statement.setString(3, filter);
             ResultSet result = statement.executeQuery();
 
-            if (result.next()) {
+            while (result.next()) {
                 Person person = new Person();
                 person.setId(result.getString("Person_id"));
                 person.setAddress(result.getString("Person_address"));
@@ -370,6 +370,7 @@ public class QueryUtils {
         }
         return doctorsList;
     }
+
     public static List<Patient> getPatientList(String patientId) {
         List<Patient> patientList = new ArrayList<Patient>();
         String query = "select Person_id, Person_firstName, Person_lastName, Person_dob, Person_phoneNumber"
@@ -411,13 +412,13 @@ public class QueryUtils {
         return patientList;
     }
 
-    public static List<Appointment> getAppointmentList(String doctorId){
+    public static List<Appointment> getAppointmentList(String doctorId) {
         List<Appointment> appointmentList = new ArrayList<Appointment>();
-         String query = "select Appoitment_id, Doctor_id, Patient_id, Appoitment_date, Appoitment_time, Appoitment_note "
+        String query = "select Appoitment_id, Doctor_id, Patient_id, Appoitment_date, Appoitment_time, Appoitment_note "
                 + "from Appointment "
                 + "where (Doctor_id = ? "
                 + "and Appoitment_date = '" + java.time.LocalDate.now() + "')";
-         try {
+        try {
             statement = dbConnection.prepareStatement(query);
             statement.setString(1, doctorId);
             ResultSet result = statement.executeQuery();
@@ -441,7 +442,7 @@ public class QueryUtils {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-         System.out.println(appointmentList);
+        System.out.println(appointmentList);
         return appointmentList;
-    }    
+    }
 }
