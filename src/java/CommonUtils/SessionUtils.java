@@ -21,7 +21,10 @@ public class SessionUtils {
     }
 
     public static String getUserName() {
-        return getSession().getAttribute("username").toString();
+        if (getSession() != null) {
+            return getSession().getAttribute("username").toString();
+        }
+        return null;
     }
 
     public static void setFirstName(String firstname) {
@@ -29,7 +32,10 @@ public class SessionUtils {
     }
 
     public static String getFirstName() {
-        return getSession().getAttribute("firstname").toString();
+        if (getSession() != null) {
+            return getSession().getAttribute("firstname").toString();
+        }
+        return null;
     }
 
     public static void setLastName(String lastname) {
@@ -37,7 +43,10 @@ public class SessionUtils {
     }
 
     public static String getLastName() {
-        return getSession().getAttribute("lastname").toString();
+        if (getSession() != null) {
+            return getSession().getAttribute("lastname").toString();
+        }
+        return null;
     }
 
     public static void setRole(String role) {
@@ -45,7 +54,10 @@ public class SessionUtils {
     }
 
     public static String getRole() {
-        return getSession().getAttribute("role").toString();
+        if (getSession() != null) {
+            return getSession().getAttribute("role").toString();
+        }
+        return null;
     }
 
     public static void setLoggedPersonId(String loggedPersonId) {
@@ -53,18 +65,21 @@ public class SessionUtils {
     }
 
     public static String getLoggedPersonId() {
-        return getSession().getAttribute("loggedPersonId").toString();
+        if (getSession() != null) {
+            return getSession().getAttribute("loggedPersonId").toString();
+        }
+        return null;
     }
-    
-    public static boolean isUserAdmin(){
+
+    public static boolean isUserAdmin() {
         return "Administrator".equals(getRole());
     }
-    
-    public static boolean isUserDoctor(){
+
+    public static boolean isUserDoctor() {
         return "Doctor".equals(getRole());
     }
-    
-    public static boolean isUserPatient(){
+
+    public static boolean isUserPatient() {
         return "Patient".equals(getRole());
     }
 }

@@ -5,10 +5,6 @@ public class Patient extends Person {
     private MedicalFile medicalFile;
     private String responsibleObserver;
 
-//    public Patient(Person person) {
-//        
-//    }
-
     public MedicalFile getMedicalFile() {
         return medicalFile;
     }

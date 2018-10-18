@@ -163,11 +163,11 @@ public class QueryUtils {
         return personsList;
     }
 
-    public static void deleteDoctor(String doctorId) {
+    public static void deletePerson(String personId) {
         String query = "delete from Persons where Person_id = ?";
         try {
             statement = dbConnection.prepareStatement(query);
-            statement.setString(1, doctorId);
+            statement.setString(1, personId);
             statement.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -176,20 +176,34 @@ public class QueryUtils {
 
     public static void insertDoctor(Doctor doctor) {
         String query = "Insert into Persons(Person_id, Person_firstName, Person_lastName, Person_dob"
-                + ", Person_phoneNumber, Person_email, Person_address, Person_country, Person_region"
-                + ", Person_type, Doctor_specialty) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 'M', ?)";
+                + ", Person_phoneNumber, Person_email, Person_address, Person_country, Person_fatherName"
+                + ", Person_motherName, Person_isMarried, Person_hasChildren, Person_gender, Person_zipCode"
+                + ", Person_ln, Person_lg, Person_region, Doctor_specialty, Person_type)"
+                + "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'M');";
         try {
             statement = dbConnection.prepareStatement(query);
             statement.setInt(1, UUID.randomUUID().hashCode());
             statement.setString(2, doctor.getFirstName());
             statement.setString(3, doctor.getLastName());
-            statement.setDate(4, new Date(doctor.getDateOfBirth().getTime()));
+            if (doctor.getDateOfBirth() != null) {
+                statement.setDate(4, new Date(doctor.getDateOfBirth().getTime()));
+            } else {
+                statement.setDate(4, null);
+            }
             statement.setString(5, doctor.getPhoneNumber());
             statement.setString(6, doctor.getEmail());
             statement.setString(7, doctor.getAddress());
             statement.setString(8, doctor.getCountry());
-            statement.setString(9, doctor.getRegion());
-            statement.setString(10, doctor.getSpecialty());
+            statement.setString(9, doctor.getFatherName());
+            statement.setString(10, doctor.getMotherName());
+            statement.setString(11, (doctor.isIsMaried() ? "O" : "N"));
+            statement.setString(12, (doctor.isHasChildren() ? "O" : "N"));
+            statement.setString(13, doctor.getGender());
+            statement.setString(14, doctor.getZipCode());
+            statement.setString(15, doctor.getLn());
+            statement.setString(16, doctor.getLg());
+            statement.setString(17, doctor.getRegion());
+            statement.setString(18, doctor.getSpecialty());
             statement.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -199,19 +213,101 @@ public class QueryUtils {
     public static void updateDoctor(Doctor doctor) {
         String query = "Update Persons set Person_firstName = ?, Person_lastName = ?, Person_dob = ?"
                 + ", Person_phoneNumber = ?, Person_email = ?, Person_address = ?, Person_country = ?"
-                + ", Person_region = ?, Doctor_specialty = ? Where Person_id = ?";
+                + ", Person_fatherName = ?, Person_motherName = ?, Person_isMarried = ?"
+                + ", Person_hasChildren = ?, Person_gender = ?, Person_zipCode = ?, Person_ln = ?"
+                + ", Person_lg = ?, Person_region = ?, Doctor_specialty = ? Where Person_id = ?";
         try {
             statement = dbConnection.prepareStatement(query);
             statement.setString(1, doctor.getFirstName());
             statement.setString(2, doctor.getLastName());
-            statement.setDate(3, new Date(doctor.getDateOfBirth().getTime()));
+            if (doctor.getDateOfBirth() != null) {
+                statement.setDate(3, new Date(doctor.getDateOfBirth().getTime()));
+            } else {
+                statement.setDate(3, null);
+            }
             statement.setString(4, doctor.getPhoneNumber());
             statement.setString(5, doctor.getEmail());
             statement.setString(6, doctor.getAddress());
             statement.setString(7, doctor.getCountry());
-            statement.setString(8, doctor.getRegion());
-            statement.setString(9, doctor.getSpecialty());
-            statement.setString(10, doctor.getId());
+            statement.setString(8, doctor.getFatherName());
+            statement.setString(9, doctor.getMotherName());
+            statement.setString(10, (doctor.isIsMaried() ? "O" : "N"));
+            statement.setString(11, (doctor.isHasChildren() ? "O" : "N"));
+            statement.setString(12, doctor.getGender());
+            statement.setString(13, doctor.getLn());
+            statement.setString(14, doctor.getLg());
+            statement.setString(15, doctor.getZipCode());
+            statement.setString(16, doctor.getRegion());
+            statement.setString(17, doctor.getSpecialty());
+            statement.setString(18, doctor.getId());
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void insertPatient(Patient patient) {
+        String query = "Insert into Persons(Person_id, Person_firstName, Person_lastName, Person_dob"
+                + ", Person_phoneNumber, Person_email, Person_address, Person_country, Person_fatherName"
+                + ", Person_motherName, Person_isMarried, Person_hasChildren, Person_gender, Person_zipCode"
+                + ", Person_region, Patient_respObsv, Person_type)"
+                + "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'P');";
+        try {
+            statement = dbConnection.prepareStatement(query);
+            statement.setInt(1, UUID.randomUUID().hashCode());
+            statement.setString(2, patient.getFirstName());
+            statement.setString(3, patient.getLastName());
+            if (patient.getDateOfBirth() != null) {
+                statement.setDate(4, new Date(patient.getDateOfBirth().getTime()));
+            } else {
+                statement.setDate(4, null);
+            }
+            statement.setString(5, patient.getPhoneNumber());
+            statement.setString(6, patient.getEmail());
+            statement.setString(7, patient.getAddress());
+            statement.setString(8, patient.getCountry());
+            statement.setString(9, patient.getFatherName());
+            statement.setString(10, patient.getMotherName());
+            statement.setString(11, (patient.isIsMaried() ? "O" : "N"));
+            statement.setString(12, (patient.isHasChildren() ? "O" : "N"));
+            statement.setString(13, patient.getGender());
+            statement.setString(14, patient.getZipCode());
+            statement.setString(15, patient.getRegion());
+            statement.setString(16, patient.getResponsibleObserver());
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void updatePatient(Patient patient) {
+        String query = "Update Persons set Person_firstName = ?, Person_lastName = ?, Person_dob = ?"
+                + ", Person_phoneNumber = ?, Person_email = ?, Person_address = ?, Person_country = ?"
+                + ", Person_fatherName = ?, Person_motherName = ?, Person_isMarried = ?"
+                + ", Person_hasChildren = ?, Person_gender = ?, Person_zipCode = ?, Patient_respObsv = ?"
+                + ", Person_region = ? Where Person_id = ?";
+        try {
+            statement = dbConnection.prepareStatement(query);
+            statement.setString(1, patient.getFirstName());
+            statement.setString(2, patient.getLastName());
+            if (patient.getDateOfBirth() != null) {
+                statement.setDate(3, new Date(patient.getDateOfBirth().getTime()));
+            } else {
+                statement.setDate(3, null);
+            }
+            statement.setString(4, patient.getPhoneNumber());
+            statement.setString(5, patient.getEmail());
+            statement.setString(6, patient.getAddress());
+            statement.setString(7, patient.getCountry());
+            statement.setString(8, patient.getFatherName());
+            statement.setString(9, patient.getMotherName());
+            statement.setString(10, (patient.isIsMaried() ? "O" : "N"));
+            statement.setString(11, (patient.isHasChildren() ? "O" : "N"));
+            statement.setString(12, patient.getGender());
+            statement.setString(13, patient.getZipCode());
+            statement.setString(14, patient.getResponsibleObserver());
+            statement.setString(15, patient.getRegion());
+            statement.setString(16, patient.getId());
             statement.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();

@@ -101,6 +101,7 @@
         color: #42555f;
         padding: 10px 5px;
         border-right: 1px solid #eeeeee;
+        border-bottom: 1px solid #eeeeee;
     }
     .dataDisplay tr:hover
     {
@@ -121,6 +122,17 @@
         width: 100%;
         border: 1px solid #e2e1e1;
     }
+    .formDisplay input,
+    .formDisplay select
+    {
+        width: 200px;
+        padding: 3px 5px;
+        border: 1px solid #bbbbbb;
+    }
+    .formDisplay select
+    {
+        width: 212px;
+    }
     .actionBar
     {
         margin-top: 15px;
@@ -130,10 +142,12 @@
     {
         color: #6d90a3;
         font-weight: bold;
+        margin-right: 5px;
     }
     .actionBar A,
     .actionBar input[type=submit]
     {
+        width: auto;
         color: white;
         border: none;
         cursor: pointer;
@@ -171,5 +185,12 @@
         border: none;
         font-weight: bold;
         text-align: center;
+    }
+    HR
+    {
+        height: 1px;
+        border: none;
+        margin: 20px 0px;
+        background: #e0e0e0;
     }
 </style>

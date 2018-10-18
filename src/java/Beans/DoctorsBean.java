@@ -16,7 +16,6 @@ public class DoctorsBean implements Serializable {
 
     private Doctor doctor;
     private List<Doctor> allDoctorsList;
-    private List<Doctor> deletedDoctorsList;
 
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
@@ -34,25 +33,25 @@ public class DoctorsBean implements Serializable {
         return allDoctorsList;
     }
 
-    public List<Doctor> getDeletedDoctorsList() {
-        return deletedDoctorsList;
-    }
-
-    public void setDeletedDoctorsList(List<Doctor> deletedDoctorsList) {
-        this.deletedDoctorsList = deletedDoctorsList;
-    }
-
     public DoctorsBean() {
+        doctor = new Doctor();
         allDoctorsList = new ArrayList<Doctor>();
-        deletedDoctorsList = new ArrayList<Doctor>();
     }
 
     public String getDoctorIdFromURL() {
         return SessionUtils.getRequest().getParameter("doctorId");
     }
 
-    public boolean isDoctorDetailsRequested() {
+    public boolean isDoctorDetailsMode() {
         return getDoctorIdFromURL() != null;
+    }
+
+    public boolean isCreateMode() {
+        return SessionUtils.getRequest().getParameter("createMode") != null;
+    }
+
+    public boolean isDisplayMode() {
+        return !isCreateMode() && !isDoctorDetailsMode();
     }
 
     public void getSpecifiedDoctorDetails(String id) {
@@ -66,47 +65,25 @@ public class DoctorsBean implements Serializable {
         allDoctorsList = QueryUtils.getDoctorList(null);
     }
 
+    public void deleteDoctor(String doctorId) {
+        QueryUtils.deletePerson(doctorId);
+        getAllDoctorsList(null);
+    }
+
     public void onLoad() {
-        if (isDoctorDetailsRequested()) {
+        if (isDoctorDetailsMode()) {
             getSpecifiedDoctorDetails(getDoctorIdFromURL());
         } else {
             getAllDoctorsList(null);
         }
     }
 
-    public void addNewDoctor() {
-        Doctor newDoctor = new Doctor();
-        newDoctor.setAction("C");
-        allDoctorsList.add(newDoctor);
-    }
-
-    public void deleteDoctor(String doctorId) {
-        Iterator<Doctor> doctorIterator = getAllDoctorsList().iterator();
-        while (doctorIterator.hasNext()) {
-            Doctor doc = doctorIterator.next();
-
-            if (doctorId.equals(doc.getId())) {
-                deletedDoctorsList.add(doc);
-                doctorIterator.remove();
-            }
-        }
-    }
-
-    public void save() {
-        if (doctor != null) {
+    public String save() {
+        if (doctor.getId() != null) {
             QueryUtils.updateDoctor(doctor);
         } else {
-            for (Doctor doc : getDeletedDoctorsList()) {
-                QueryUtils.deleteDoctor(doc.getId());
-            }
-            for (Doctor doc : getAllDoctorsList()) {
-                if ("C".equals(doc.getAction())) {
-                    QueryUtils.insertDoctor(doc);
-                } else {
-                    QueryUtils.updateDoctor(doc);
-                }
-            }
-            getAllDoctorsList(null);
+            QueryUtils.insertDoctor(doctor);
         }
+        return "doctors?faces-redirect=true";
     }
 }

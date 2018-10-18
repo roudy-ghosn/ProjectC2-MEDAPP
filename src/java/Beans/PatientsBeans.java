@@ -16,11 +16,10 @@ public class PatientsBeans implements Serializable {
 
     private Patient patient;
     private List<Patient> patientsList;
-    private List<Patient> deletedPatientsList;
 
     public PatientsBeans() {
+        patient = new Patient();
         patientsList = new ArrayList<Patient>();
-        deletedPatientsList = new ArrayList<Patient>();
     }
 
     public List<Patient> getPatientsList() {
@@ -39,32 +38,32 @@ public class PatientsBeans implements Serializable {
         this.patientsList = patientsList;
     }
 
-    public void setDeletedPatientsList(List<Patient> deletedPatientsList) {
-        this.deletedPatientsList = deletedPatientsList;
-    }
-
-    public List<Patient> getDeletedPatientsList() {
-        return deletedPatientsList;
-    }
-
     public void getPatientsList(String filter) {
         patientsList = QueryUtils.getPatientList(filter);
-    }
-
-    public void onLoad() {
-        if (isPatientDetailsRequested()) {
-            getSpecifiedPatientDetails(getPatientIdFromURL());
-        } else {
-            getPatientsList(null);
-        }
     }
 
     public String getPatientIdFromURL() {
         return SessionUtils.getRequest().getParameter("patientId");
     }
 
-    public boolean isPatientDetailsRequested() {
+    public boolean isPatientDetailsMode() {
         return getPatientIdFromURL() != null;
+    }
+
+    public boolean isCreateMode() {
+        return SessionUtils.getRequest().getParameter("createMode") != null;
+    }
+
+    public boolean isDisplayMode() {
+        return !isCreateMode() && !isPatientDetailsMode();
+    }
+
+    public void onLoad() {
+        if (isPatientDetailsMode()) {
+            getSpecifiedPatientDetails(getPatientIdFromURL());
+        } else {
+            getPatientsList(null);
+        }
     }
 
     public void getSpecifiedPatientDetails(String id) {
@@ -75,38 +74,16 @@ public class PatientsBeans implements Serializable {
     }
 
     public void deletePatient(String patientId) {
-        Iterator<Patient> patientIterator = getPatientsList().iterator();
-        while (patientIterator.hasNext()) {
-            Patient pat = patientIterator.next();
-
-            if (patientId.equals(pat.getId())) {
-                deletedPatientsList.add(pat);
-                patientIterator.remove();
-            }
-        }
-    }
-
-    public void addNewPatient() {
-        Patient newPatient = new Patient();
-        newPatient.setAction("C");
-        patientsList.add(newPatient);
+        QueryUtils.deletePerson(patientId);
+        getPatientsList(null);
     }
 
     public void save() {
-        if (patient != null) {
-            // QueryUtils.updatePatient(patient);
+        if (patient.getId() != null) {
+            QueryUtils.updatePatient(patient);
         } else {
-            for (Patient pat : getDeletedPatientsList()) {
-                // QueryUtils.deletePatient(pat.getId());
-            }
-            for (Patient pat : getPatientsList()) {
-                if ("C".equals(pat.getAction())) {
-                    // QueryUtils.insertPatient(pat);
-                } else {
-                    // QueryUtils.updatePatient(pat);
-                }
-            }
-            getPatientsList(null);
+            QueryUtils.insertPatient(patient);
         }
+        getPatientsList(null);
     }
 }
