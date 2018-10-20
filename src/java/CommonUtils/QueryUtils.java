@@ -58,7 +58,8 @@ public class QueryUtils {
         List<User> usersList = new ArrayList<User>();
         String query = "select Users.User_id, Users.User_userName, Users.User_passowrd, Users.User_creationDate, Roles.Role_id, Persons.Person_id "
                 + "from Users, Persons, Roles "
-                + "where lower(Users.User_userName) like lower('%" + (filter != null ? filter : "") + "%') "
+                + "where ( lower(Users.User_userName) like lower('%" + (filter != null ? filter : "") + "%') "
+                + " or lower(Users.User_id) like lower('%" + (filter != null ? filter : "") + "%') ) "
                 + "and Users.Person_id = Persons.Person_id "
                 + "and Users.Role_id = Roles.Role_id";
         try {

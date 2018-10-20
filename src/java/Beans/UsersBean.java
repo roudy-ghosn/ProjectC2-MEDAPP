@@ -4,6 +4,7 @@ import BusinessObjects.Person;
 import BusinessObjects.Role;
 import BusinessObjects.User;
 import CommonUtils.QueryUtils;
+import CommonUtils.SessionUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,12 +17,20 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped
 public class UsersBean implements Serializable {
 
+    private User user;
     private List<User> usersList;
-    private List<User> deletedUsersList;
 
     public UsersBean() {
+        user = new User();
         usersList = new ArrayList<User>();
-        deletedUsersList = new ArrayList<User>();
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public List<User> getUsersList() {
@@ -32,20 +41,39 @@ public class UsersBean implements Serializable {
         this.usersList = usersList;
     }
 
-    public List<User> getDeletedUsersList() {
-        return deletedUsersList;
-    }
-
-    public void setDeletedUsersList(List<User> deletedUsersList) {
-        this.deletedUsersList = deletedUsersList;
-    }
-
     public void getUsersList(String filter) {
         usersList = QueryUtils.getUsersList(filter);
     }
 
+    public String getUserIdFromURL() {
+        return SessionUtils.getRequest().getParameter("userId");
+    }
+
+    public boolean isUserDetailsMode() {
+        return getUserIdFromURL() != null;
+    }
+
+    public boolean isCreateMode() {
+        return SessionUtils.getRequest().getParameter("createMode") != null;
+    }
+
+    public boolean isDisplayMode() {
+        return !isCreateMode() && !isUserDetailsMode();
+    }
+
+    public void getSpecifiedUserDetails(String id) {
+        List<User> users = QueryUtils.getUsersList(id);
+        if (users != null && users.size() > 0) {
+            user = users.get(0);
+        }
+    }
+
     public void onLoad() {
-        getUsersList(null);
+        if (isUserDetailsMode()) {
+            getSpecifiedUserDetails(getUserIdFromURL());
+        } else {
+            getUsersList(null);
+        }
     }
 
     public void addNewUser() {
@@ -56,29 +84,16 @@ public class UsersBean implements Serializable {
     }
 
     public void deleteUser(String userId) {
-        Iterator<User> userIterator = getUsersList().iterator();
-        while (userIterator.hasNext()) {
-            User user = userIterator.next();
-
-            if (userId.equals(user.getId())) {
-                deletedUsersList.add(user);
-                userIterator.remove();
-            }
-        }
+        QueryUtils.deleteUser(userId);
     }
 
-    public void save() {
-        for (User user : getDeletedUsersList()) {
-            QueryUtils.deleteUser(user.getId());
+    public String save() {
+        if (user.getId() != null) {
+            QueryUtils.updateUser(user);
+        } else {
+            QueryUtils.insertUser(user);
         }
-        for (User user : getUsersList()) {
-            if ("C".equals(user.getAction())) {
-                QueryUtils.insertUser(user);
-            } else {
-                QueryUtils.updateUser(user);
-            }
-        }
-        getUsersList();
+        return "users?faces-redirect=true";
     }
 
     /* LOVS */
