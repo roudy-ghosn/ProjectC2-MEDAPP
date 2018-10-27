@@ -3,11 +3,7 @@ package BusinessObjects;
 public class Patient extends Person {
 
     private MedicalFile medicalFile;
-    private Doctor responsibleObserver;
-
-    public Patient(Person person) {
-        
-    }
+    private String responsibleObserver;
 
     public MedicalFile getMedicalFile() {
         return medicalFile;
@@ -17,11 +13,12 @@ public class Patient extends Person {
         this.medicalFile = medicalFile;
     }
 
-    public void setResponsibleObserver(Doctor responsibleObserver) {
+    public void setResponsibleObserver(String responsibleObserver) {
         this.responsibleObserver = responsibleObserver;
     }
 
-    public Doctor getResponsibleObserver() {
+    public String getResponsibleObserver() {
         return responsibleObserver;
     }
+    
 }

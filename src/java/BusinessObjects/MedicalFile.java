@@ -1,9 +1,10 @@
 package BusinessObjects;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class MedicalFile {
+public class MedicalFile implements Serializable {
     
     private String id;
     private Doctor doctor;
@@ -13,10 +14,6 @@ public class MedicalFile {
 
     public String getId() {
         return id;
-    }
-
-    public Doctor getDoctor() {
-        return doctor;
     }
 
     public Date getCreationDate() {
@@ -35,12 +32,16 @@ public class MedicalFile {
         this.id = id;
     }
 
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
     }
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
+    public Doctor getDoctor() {
+        return doctor;
     }
 
     public void setNotes(String notes) {

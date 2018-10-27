@@ -1,0 +1,146 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="header">
+        <title>MEDAPP - Profile</title>
+        <f:metadata>
+            <f:viewAction action="#{profileBean.onLoad()}" />  
+        </f:metadata>
+    </ui:define>
+
+    <ui:include src="common/style.html" />
+
+    <style>
+        label
+        {
+            width: 150px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .inputHolder
+        {
+            width: 50%;
+            font-size: 15px;
+            margin-bottom: 6px;
+            display: inline-block;
+        }
+        .profilePic
+        {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: #eeeeee;
+            display: inline-block;
+            border: 1px solid #6d90a3;
+        }
+        .profilePic:hover
+        {
+            cursor: pointer;
+            background: #6d90a3;
+        }
+        .profilePic IMG
+        {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+    </style>
+
+    <h:body>
+        <ui:include src="common/header.html" />
+
+        <div class="middle" id="body">
+            <div class="logoutDiv">
+                <f:view>
+                    <h:form>
+                        <h:commandLink action="#{loginBean.logout}" value="Logout"/>
+                    </h:form>
+                </f:view>
+            </div>
+
+            <div style="text-align: center;">
+                <span class="profilePic">
+                    <h:graphicImage url="#{profileBean.imageURL}" />
+                </span>
+            </div>
+            <hr/>
+            <div style="font-size: 0px;" class="formDisplay">
+                <h:form styleClass="width: 100%;">
+                    <div class="inputHolder">
+                        <h:outputLabel value="First Name"/>
+                        <h:inputText value="#{profileBean.person.firstName}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Last Name"/>
+                        <h:inputText value="#{profileBean.person.lastName}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Gender"/>
+                        <h:selectOneMenu value="#{profileBean.person.gender}"  required="true">
+                            <f:selectItems value="#{managedBeanBase.genderListOfValues}" var="gender" itemValue="#{gender.code}" itemLabel="#{gender}"/>
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Date Of Birth"/>
+                        <h:inputText value="#{profileBean.person.dateOfBirth}">
+                            <f:convertDateTime pattern="dd.MM.yyyy" />
+                        </h:inputText>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Father's Name"/>
+                        <h:inputText value="#{profileBean.person.fatherName}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Mother's Number"/>
+                        <h:inputText value="#{profileBean.person.motherName}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Phone Number"/>
+                        <h:inputText value="#{profileBean.person.phoneNumber}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Email"/>
+                        <h:inputText value="#{profileBean.person.email}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Married"/>
+                        <h:selectBooleanCheckbox value="#{profileBean.person.isMaried}" style="width: auto;"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Has Children"/>
+                        <h:selectBooleanCheckbox value="#{profileBean.person.hasChildren}" style="width: auto;"/>
+                    </div>
+                    <hr/>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Address"/>
+                        <h:inputText value="#{profileBean.person.address}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Country"/>
+                        <h:inputText value="#{profileBean.person.country}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Region"/>
+                        <h:inputText value="#{profileBean.person.region}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Zip Code"/>
+                        <h:inputText value="#{profileBean.person.zipCode}"/>
+                    </div>
+                    <hr/>
+                    <div class="actionBar">
+                        <h:commandButton value="Save" action="#{doctorsBean.save()}"/>
+                    </div>
+                </h:form>
+            </div>
+
+        </div>
+
+        <ui:include src="common/footer.html" />
+    </h:body>
+</html>
+

@@ -22,9 +22,9 @@
     }
     H3
     {
-        font-size: 30px;
         padding: 30px 0px;
         text-align: center;
+        text-transform: uppercase;
     }
     H1, H2, H3, H4
     {
@@ -47,7 +47,7 @@
     .middle
     {
         height: 100%;
-        padding: 0px 20px;
+        padding: 0px 20px 15px 20px;
     }
     BODY .header .menu
     {	
@@ -92,6 +92,7 @@
     .dataDisplay
     {
         width: 100%;
+        font-size: 13px;
         border-spacing: 0px;
         border: 1px solid #dedede;
     }
@@ -100,6 +101,7 @@
         color: #42555f;
         padding: 10px 5px;
         border-right: 1px solid #eeeeee;
+        border-bottom: 1px solid #eeeeee;
     }
     .dataDisplay tr:hover
     {
@@ -111,6 +113,7 @@
         font-weight: bold;
         padding: 10px 15px;
         background: #6D90A3;
+        text-transform: uppercase;
         border-right: 1px solid #9caeb8;
     }
     .dataDisplay input,
@@ -119,22 +122,41 @@
         width: 100%;
         border: 1px solid #e2e1e1;
     }
-    .dataDisplay A,
-    .actionBar input[type=submit]
+    .formDisplay input,
+    .formDisplay select
+    {
+        width: 200px;
+        padding: 3px 5px;
+        border: 1px solid #bbbbbb;
+    }
+    .formDisplay select
+    {
+        width: 212px;
+    }
+    .actionBar
+    {
+        margin-top: 15px;
+        text-align: right;
+    }
+    .dataDisplay A
     {
         color: #6d90a3;
-        padding: 3px 10px;
         font-weight: bold;
-        display: inline-block;
-        text-decoration: underline;
+        margin-right: 5px;
     }
+    .actionBar A,
     .actionBar input[type=submit]
     {
+        width: auto;
+        color: white;
         border: none;
         cursor: pointer;
         font-size: 15px;
-        background: none;
-        padding: 10px 0 10px 10px;
+        margin-left: 5px;
+        padding: 5px 10px;
+        font-weight: bold;
+        background: #6d90a3;
+        display: inline-block;
     }
     .logoutDiv
     {
@@ -163,6 +185,13 @@
         border: none;
         font-weight: bold;
         text-align: center;
+    }
+    HR
+    {
+        height: 1px;
+        border: none;
+        margin: 20px 0px;
+        background: #e0e0e0;
     }
     
     

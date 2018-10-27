@@ -18,6 +18,14 @@
             30
         </session-timeout>
     </session-config>
+    <navigation-rule>
+        <from-view-id>login.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>homepage</from-outcome>
+            <to-view-id>homepage.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
     <welcome-file-list>
         <welcome-file>faces/calendar-doctor.xhtml</welcome-file>
     </welcome-file-list>

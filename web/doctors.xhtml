@@ -1,0 +1,196 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="header">
+        <title>MEDAPP - Doctors</title>
+        <f:metadata>
+            <f:viewAction action="#{doctorsBean.onLoad}" />  
+        </f:metadata>
+    </ui:define>
+
+    <ui:include src="common/style.html" />
+
+    <style>
+        label
+        {
+            width: 150px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .inputHolder
+        {
+            width: 50%;
+            font-size: 15px;
+            margin-bottom: 6px;
+            display: inline-block;
+        }
+    </style>
+
+    <h:body>
+        <ui:include src="common/header.html" />
+
+        <div class="middle" id="body">
+            <div class="logoutDiv">
+                <f:view>
+                    <h:form>
+                        <h:commandLink action="#{loginBean.logout}" value="Logout"/>
+                    </h:form>
+                </f:view>
+            </div>
+
+            <!-- Specific Doctor Details --> 
+            <div style="font-size: 0px; display: #{doctorsBean.displayMode ? 'none' : 'block'}" class="formDisplay">
+                <h:form styleClass="width: 100%;">
+                    <h2 style="font-size: 22px; text-align: center; display: #{doctorsBean.doctorDetailsMode ? 'block' : 'none'}">
+                        Doctor #{doctorsBean.doctor.firstName} #{doctorsBean.doctor.lastName}
+                    </h2>
+                    <h2 style="font-size: 22px; text-align: center; display: #{doctorsBean.createMode ? 'block' : 'none'}">
+                        Add New Doctor
+                    </h2>
+                    <hr/>
+                    <div class="inputHolder">
+                        <h:outputLabel value="First Name"/>
+                        <h:inputText value="#{doctorsBean.doctor.firstName}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Last Name"/>
+                        <h:inputText value="#{doctorsBean.doctor.lastName}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Gender"/>
+                        <h:selectOneMenu value="#{doctorsBean.doctor.gender}"  required="true" disabled="#{!managedBeanBase.loggedInUserAdmin}">
+                            <f:selectItems value="#{managedBeanBase.genderListOfValues}" var="gender" itemValue="#{gender.code}" itemLabel="#{gender}"/>
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Date Of Birth"/>
+                        <h:inputText value="#{doctorsBean.doctor.dateOfBirth}" disabled="#{!managedBeanBase.loggedInUserAdmin}">
+                            <f:convertDateTime pattern="dd.MM.yyyy" />
+                        </h:inputText>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Father's Name"/>
+                        <h:inputText value="#{doctorsBean.doctor.fatherName}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Mother's Number"/>
+                        <h:inputText value="#{doctorsBean.doctor.motherName}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Phone Number"/>
+                        <h:inputText value="#{doctorsBean.doctor.phoneNumber}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Email"/>
+                        <h:inputText value="#{doctorsBean.doctor.email}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Married"/>
+                        <h:selectBooleanCheckbox value="#{doctorsBean.doctor.isMaried}" disabled="#{!managedBeanBase.loggedInUserAdmin}" style="width: auto;"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Has Children"/>
+                        <h:selectBooleanCheckbox value="#{doctorsBean.doctor.hasChildren}" disabled="#{!managedBeanBase.loggedInUserAdmin}" style="width: auto;"/>
+                    </div>
+                    <hr/>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Specialty"/>
+                        <h:inputText value="#{doctorsBean.doctor.specialty}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Address"/>
+                        <h:inputText value="#{doctorsBean.doctor.address}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Country"/>
+                        <h:inputText value="#{doctorsBean.doctor.country}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Region"/>
+                        <h:inputText value="#{doctorsBean.doctor.region}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Zip Code"/>
+                        <h:inputText value="#{doctorsBean.doctor.zipCode}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
+                    </div>
+                    <hr/>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Latitude"/>
+                        <h:inputText value="#{doctorsBean.doctor.ln}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Longitude"/>
+                        <h:inputText value="#{doctorsBean.doctor.lg}" disabled="#{!managedBeanBase.loggedInUserAdmin}"/>
+                    </div>
+                    <hr/>
+                    <div class="actionBar" style="display: #{managedBeanBase.loggedInUserAdmin ? 'block' : 'none'}">
+                        <a href="doctors.xhtml?faces-redirect=true" target="_self">Back</a>
+                        <h:commandButton value="Save" action="#{doctorsBean.save()}"/>
+                    </div>
+                </h:form>
+            </div>
+
+            <!--List of Doctors --> 
+            <div style="display: #{doctorsBean.displayMode ? 'block' : 'none'}">
+                <h:form>
+                    <h3 style="text-align: center; padding-top: 10px;">List of doctors in the system</h3>
+                    <h:dataTable id="doctorsTable" value="#{doctorsBean.allDoctorsList}" var="doctor" headerClass="list-header" rowClasses="list-row" class="dataDisplay">
+                        <h:column>
+                            <f:facet name="header">Doctor Name</f:facet>
+                            <a href="doctors.xhtml?doctorId=#{doctor.id}" target="_self">Dr. #{doctor.firstName} #{doctor.lastName}</a>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Date of birth</f:facet>
+                            <h:outputText value="#{doctor.dateOfBirth}">
+                                <f:convertDateTime pattern="dd.MM.yyyy" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Specialty</f:facet>
+                            <h:outputText value="#{doctor.specialty}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Tel</f:facet>
+                            <h:outputText value="#{doctor.phoneNumber}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Email</f:facet>
+                            <h:outputText value="#{doctor.email}"/>
+                        </h:column> 
+                        <h:column>
+                            <f:facet name="header">Address</f:facet>
+                            <h:outputText value="#{doctor.address}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Country</f:facet>
+                            <h:outputText value="#{doctor.country}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Region</f:facet>
+                            <h:outputText value="#{doctor.region}"/>
+                        </h:column>
+                        <h:column rendered="#{managedBeanBase.loggedInUserAdmin}">
+                            <a href="doctors.xhtml?doctorId=#{doctor.id}" target="_self">Edit</a>
+                            <h:commandLink onclick="if (!confirm('Are you sure you want to delete patient #{patient.firstName} #{patient.lastName} ?'))
+                                        return false" 
+                                           value="Delete" action="#{doctorsBean.deleteDoctor(doctor.id)}"/>
+                        </h:column>
+                        <h:column rendered="#{!managedBeanBase.loggedInUserAdmin}">
+                            <a href="doctors.xhtml?doctorId=#{doctor.id}" target="_self">View Details</a>
+                        </h:column>
+                    </h:dataTable>
+                    <div class="actionBar" style="display: #{managedBeanBase.loggedInUserAdmin ? 'block' : 'none'}">
+                        <a href="doctors.xhtml?createMode" target="_self">Add New</a>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+
+        <ui:include src="common/footer.html" />
+    </h:body>
+</html>
+

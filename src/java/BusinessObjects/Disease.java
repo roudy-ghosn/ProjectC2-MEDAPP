@@ -1,6 +1,8 @@
 package BusinessObjects;
 
-public class Disease {
+import java.io.Serializable;
+
+public class Disease implements Serializable {
     
     private String id;
     private String type;

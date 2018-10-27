@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="header">
         <title>MEDAPP - Users</title>
@@ -13,6 +13,22 @@
     </ui:define>
 
     <ui:include src="Common/style.html" />
+
+    <style>
+        label
+        {
+            width: 150px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .inputHolder
+        {
+            width: 50%;
+            font-size: 15px;
+            margin-bottom: 6px;
+            display: inline-block;
+        }
+    </style>
 
     <h:body>
         <ui:include src="Common/header.html" />
@@ -25,41 +41,92 @@
                     </h:form>
                 </f:view>
             </div>
-            <h:form>
-                <h:dataTable id="users" value="#{usersBean.usersList}" var="user" headerClass="list-header" rowClasses="list-row" class="dataDisplay">
-                    <h:column>
-                        <f:facet name="header">Role</f:facet>
-                        <h:selectOneMenu value="#{user.role}"  required="true">
-                            <f:selectItems value="#{usersBean.rolesList}" var="role" itemValue="#{role.id}" itemLabel="#{role.id} #{role.description}"/>
-                        </h:selectOneMenu>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">Person</f:facet>
-                        <h:selectOneMenu value="#{user.person}"  required="true">
+
+            <div style="font-size: 0px; display: #{usersBean.displayMode ? 'none' : 'block'}" class="formDisplay">
+                <h:form styleClass="width: 100%;">
+                    <h2 style="font-size: 22px; text-align: center; display: #{usersBean.userDetailsMode ? 'block' : 'none'}">
+                        User #{usersBean.user.username}
+                    </h2>
+                    <h2 style="font-size: 22px; text-align: center; display: #{usersBean.createMode ? 'block' : 'none'}">
+                        Add New User
+                    </h2>
+                    <hr/>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Username"/>
+                        <h:inputText value="#{usersBean.user.username}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Password"/>
+                        <h:inputSecret value="#{usersBean.user.password}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Person"/>
+                        <h:selectOneMenu value="#{usersBean.user.person}"  required="true">
                             <f:selectItems value="#{usersBean.personsList}" var="person" itemValue="#{person.id}" itemLabel="#{person.firstName} #{person.lastName}"/>
                         </h:selectOneMenu>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">UserName</f:facet>
-                        <h:inputText value="#{user.username}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">Password</f:facet>
-                        <h:inputText value="#{user.password}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">Actions</f:facet>
-                        <h:commandLink value="Delete" action="#{usersBean.deleteUser(user.id)}" />
-                    </h:column>
-                </h:dataTable> 
-                <div style="text-align: right;" class="actionBar">
-                    <h:commandButton value="Add" action="#{usersBean.addNewUser()}" />
-                    <h:commandButton value="Save" action="#{usersBean.save()}" />
-                </div>
-            </h:form>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Role"/>
+                        <h:selectOneMenu value="#{usersBean.user.role}"  required="true">
+                            <f:selectItems value="#{usersBean.rolesList}" var="role" itemValue="#{role.id}" itemLabel="#{role.id} #{role.description}"/>
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Creation Date"/>
+                        <h:inputText value="#{usersBean.user.creationDate}">
+                            <f:convertDateTime pattern="dd.MM.yyyy" />
+                        </h:inputText>
+                    </div>
+                    <hr/>
+                    <div class="actionBar" style="display: #{managedBeanBase.loggedInUserAdmin ? 'block' : 'none'}">
+                        <a href="users.xhtml?faces-redirect=true" target="_self">Back</a>
+                        <h:commandButton value="Save" action="#{usersBean.save()}"/>
+                    </div>
+                </h:form>
+            </div>
+
+            <!--List of Users --> 
+            <div style="display: #{usersBean.displayMode ? 'block' : 'none'}">
+                <h:form>
+                    <h3 style="text-align: center; padding-top: 10px;">List of users in the system</h3>
+                    <h:dataTable id="usersTable" value="#{usersBean.usersList}" var="user" headerClass="list-header" rowClasses="list-row" class="dataDisplay">
+                        <h:column>
+                            <f:facet name="header">User</f:facet>
+                            <a href="users.xhtml?userId=#{user.id}" target="_self">#{user.username}</a>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Person</f:facet>
+                            <h:selectOneMenu value="#{user.person}" disabled="true">
+                                <f:selectItems value="#{usersBean.personsList}" var="person" itemValue="#{person.id}" itemLabel="#{person.firstName} #{person.lastName}"/>
+                            </h:selectOneMenu>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Role</f:facet>
+                            <h:selectOneMenu value="#{user.role}" disabled="true">
+                                <f:selectItems value="#{usersBean.rolesList}" var="role" itemValue="#{role.id}" itemLabel="#{role.id} #{role.description}"/>
+                            </h:selectOneMenu>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Creation Date</f:facet>
+                            <h:outputText value="#{user.creationDate}">
+                                <f:convertDateTime pattern="dd.MM.yyyy" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <a href="users.xhtml?userId=#{user.id}" target="_self">Edit</a>
+                            <h:commandLink onclick="if (!confirm('Are you sure you want to delete user #{user.username} ?'))
+                                        return false" 
+                                           value="Delete" action="#{usersBean.deleteUser(user.id)}"/>
+                        </h:column>
+                    </h:dataTable>
+                    <div class="actionBar">
+                        <a href="users.xhtml?createMode" target="_self">Add New</a>
+                    </div>
+                </h:form>
+            </div>
         </div>
         
         <ui:include src="Common/footer.html" />
     </h:body>
-</ui:composition>
+</html>
 

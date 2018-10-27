@@ -5,11 +5,25 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <h:head>
-        <title>MEDAPP - HomePage</title>
-    </h:head>
+    <ui:define name="header">
+        <title>MEDAPP - Homepage</title>
+        <f:metadata>
+            <f:viewAction action="#{homePageBean.onLoad}" />  
+        </f:metadata>
+    </ui:define>
 
     <ui:include src="Common/style.html" />
+
+    <style>
+        label
+        {
+            font-weight: bold;
+        }
+        .inputHolder
+        {
+            margin-bottom: 6px;
+        }
+    </style>
 
     <h:body>
         <ui:include src="Common/header.html" />
@@ -22,10 +36,101 @@
                     </h:form>
                 </f:view>
             </div>
-            <h4>Welcome #{homePageBean.userFullname},</h4>
+
+            <h4 style="margin-bottom: 20px;">Welcome #{homePageBean.userFullname},</h4>
+
+            <div id="patientDiv" style="display: #{managedBeanBase.loggedInUserPatient ? 'block' : 'none'}">
+                <h:form styleClass="width: 100%;">
+                    <div class="inputHolder">
+                        <h:outputLabel value="Medical File Number: "/>
+                        <h:outputText value="#{homePageBean.medicalFile.id}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Creation Date: "/>
+                        <h:outputText value="#{homePageBean.medicalFile.creationDate}" >
+                            <f:convertDateTime pattern="dd.MM.yyyy" />
+                        </h:outputText>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Responsable Doctor: "/>
+                        <a href="doctors.xhtml?doctorId=#{homePageBean.medicalFile.doctor.id}" target="_self">
+                            #{homePageBean.medicalFile.doctor.firstName} #{homePageBean.medicalFile.doctor.lastName}
+                        </a>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Medical File Notes: "/>
+                        <h:outputText value="#{homePageBean.medicalFile.notes}"/>
+                    </div>
+                </h:form>
+                <br/>
+                <!--List of Related Report--> 
+                <h:dataTable id="reportTable" value="#{homePageBean.medicalFile.reports}" var="report" headerClass="list-header" rowClasses="list-row" class="dataDisplay">
+                    <h:column>
+                        <f:facet name="header">Report Id</f:facet>
+                        <a href="reports.xhtml" target="_self">#{report.id}</a>
+                    </h:column> 
+                    <h:column>
+                        <f:facet name="header">Creation Date</f:facet>
+                        <h:outputText value="#{report.date}" >
+                            <f:convertDateTime pattern="dd.MM.yyyy" />
+                        </h:outputText>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Doctor</f:facet>
+                        <a href="doctors.xhtml?doctorId=#{report.doctor.id}" target="_self">
+                            #{report.doctor.firstName} #{report.doctor.lastName}
+                        </a>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Title</f:facet>
+                        <h:outputText value="#{report.title}"/>
+                    </h:column> 
+                    <h:column>
+                        <f:facet name="header">Description</f:facet>
+                        <h:outputText value="#{report.description}"/>
+                    </h:column> 
+                </h:dataTable> 
+            </div>
+
+            <div id="doctorDiv" style="display: #{managedBeanBase.loggedInUserDoctor ? 'block' : 'none'}">
+                <h:form styleClass="width: 100%;">
+                    <div class="inputHolder">
+                        <h:outputLabel value="Today's Appointments #{homePageBean.todaysDate}"/>
+                    </div>
+                </h:form>
+                <br/>
+                <!--List of Related Appointments --> 
+                <h:dataTable id="appointmentTable" value="#{homePageBean.appointmentList}" var="appList" headerClass="list-header" rowClasses="list-row" class="dataDisplay">
+                    <h:column>
+                        <f:facet name="header">Appointment Id</f:facet>
+                        <h:outputText value="#{appList.id}"/>
+                    </h:column> 
+                    <h:column>
+                        <f:facet name="header">Appointment Time</f:facet>
+                        <h:outputText value="#{appList.time}" >
+                        </h:outputText>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Patient</f:facet>
+                        <a href="patients.xhtml?patientId=#{appList.patient.id}" target="_self">
+                            #{appList.patient.firstName} #{appList.patient.lastName}
+                        </a>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Notes</f:facet>
+                        <h:outputText value="#{appList.notes}"/>
+                    </h:column> 
+                </h:dataTable>
+                <div class="actionBar">
+                    <f:view>
+                        <h:form>
+                            <a href="schedule.xhtml" target="_self">view schedule</a>
+                        </h:form>
+                    </f:view>
+                </div>
+            </div>            
         </div>
 
         <ui:include src="Common/footer.html" />
     </h:body>
 </ui:composition>
-
