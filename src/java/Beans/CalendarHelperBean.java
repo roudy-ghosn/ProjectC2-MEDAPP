@@ -57,8 +57,6 @@ public class CalendarHelperBean {
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
         
         
-        finalHTML += "Count = " + calendar.getActualMaximum(Calendar.DAY_OF_MONTH);;
-        
         finalHTML += "<ul class=\"days\">";
         
         int currentDate = calendar.get(Calendar.DATE);
@@ -67,10 +65,6 @@ public class CalendarHelperBean {
             finalHTML += "<li class=\"day other-month\">\n" +
 "                    </li>";
         }
-        
-//        calendar = Calendar.getInstance();
-//        calendar.set(Calendar.DAY_OF_MONTH, 1);
-//        calendar.add(Calendar.MONTH, monthShift);
 
         int myMonth = calendar.get(Calendar.MONTH);
         while (myMonth == calendar.get(Calendar.MONTH)) {
