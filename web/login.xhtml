@@ -8,7 +8,7 @@
         <title>MEDAPP</title>
     </h:head>
 
-    <ui:include src="common/style.html" />
+    <ui:include src="Common/style.html" />
 
     <h:body>
         <h3>Login</h3>
@@ -33,7 +33,7 @@
                     </tbody>
                 </table>
                 <div class="errorText">
-                    <h:inputText value="#{loginBean.errorText}" styleClass="color: red; font-weight: bold;"/>
+                    <h:inputText disabled="true" value="#{loginBean.errorText}" styleClass="color: red; font-weight: bold;"/>
                 </div>
             </h:form>
         </f:view>
