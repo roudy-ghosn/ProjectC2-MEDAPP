@@ -1,5 +1,6 @@
 package Beans;
 
+import BusinessObjects.Disease;
 import BusinessObjects.Doctor;
 import BusinessObjects.Gender;
 import CommonUtils.QueryUtils;
@@ -41,5 +42,8 @@ public class ManagedBeanBase implements Serializable {
     
     public List<Doctor> getDoctorsListOfValues(){
         return QueryUtils.getDoctorList(null);
+    }
+    public List<Disease> getDiseasesListOfValues(){
+        return QueryUtils.getDiseaseList(null);
     }
 }

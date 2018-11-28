@@ -5,8 +5,11 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:define name="header">
+    <h:head>
         <title>MEDAPP - Homepage</title>
+    </h:head>
+    
+    <ui:define name="header">
         <f:metadata>
             <f:viewAction action="#{homePageBean.onLoad}" />  
         </f:metadata>

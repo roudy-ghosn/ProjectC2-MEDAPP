@@ -6,8 +6,11 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
-    <ui:define name="header">
+    <h:head>
         <title>MEDAPP - Patients</title>
+    </h:head>
+
+    <ui:define name="header">
         <f:metadata>
             <f:viewAction action="#{patientsBeans.onLoad()}" />
         </f:metadata>
@@ -122,6 +125,38 @@
                         </h:selectOneMenu>
                     </div>
                     <hr/>
+                    
+                    <!--List of Related Report--> 
+                    <h2 style="font-size: 22px; text-align: center; margin: 40px 0 20px 0; display: #{patientsBeans.patientDetailsMode ? 'block' : 'none'}">
+                        Medical Reports
+                    </h2>
+                    <h:dataTable id="reportTable" value="#{patientsBeans.medicalFile.reports}" var="report" headerClass="list-header" rowClasses="list-row" class="dataDisplay">
+                        <h:column>
+                            <f:facet name="header">Report Id</f:facet>
+                            <a href="reports.xhtml?reportId=#{report.id}" target="_self">#{report.id}</a>
+                        </h:column> 
+                        <h:column>
+                            <f:facet name="header">Creation Date</f:facet>
+                            <h:outputText value="#{report.date}" >
+                                <f:convertDateTime pattern="dd.MM.yyyy" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Doctor</f:facet>
+                            <a href="doctors.xhtml?doctorId=#{report.doctor.id}" target="_self">
+                                #{report.doctor.firstName} #{report.doctor.lastName}
+                            </a>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Title</f:facet>
+                            <h:outputText value="#{report.title}"/>
+                        </h:column> 
+                        <h:column>
+                            <f:facet name="header">Description</f:facet>
+                            <h:outputText value="#{report.description}"/>
+                        </h:column> 
+                    </h:dataTable>
+                    
                     <div class="actionBar" style="display: #{managedBeanBase.loggedInUserPatient ? 'none' : 'block'}">
                         <a href="patients.xhtml?faces-redirect=true" target="_self">Back</a>
                         <h:commandButton value="Save" action="#{patientsBeans.save()}"/>
