@@ -602,7 +602,8 @@ public class QueryUtils {
         String query = "select Appoitment_id, Doctor_id, Patient_id, Appoitment_date, Appoitment_time, Appoitment_note "
                 + "from Appointment "
                 + "where (Doctor_id = ? "
-                + "and Appoitment_date = '" + java.time.LocalDate.now() + "')";
+                + ")";
+        //and Appoitment_date = '" + java.time.LocalDate.now() + "'
         try {
             statement = dbConnection.prepareStatement(query);
             statement.setString(1, doctorId);

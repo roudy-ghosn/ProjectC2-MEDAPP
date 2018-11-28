@@ -26,7 +26,7 @@ public class Appointment implements Serializable {
         return date;
     }
     public void setDate(Date creationDate) {
-        this.date = date;
+        this.date = creationDate;
     }
     public void setNotes(String notes) {
         this.notes = notes;
