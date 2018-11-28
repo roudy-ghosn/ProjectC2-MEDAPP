@@ -27,6 +27,6 @@
         </navigation-case>
     </navigation-rule>
     <welcome-file-list>
-        <welcome-file>faces/calendar-doctor.xhtml</welcome-file>
+        <welcome-file>login.xhtml</welcome-file>
     </welcome-file-list>
 </web-app>

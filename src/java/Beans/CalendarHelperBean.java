@@ -5,8 +5,12 @@
  */
 package Beans;
 
+import BusinessObjects.Appointment;
+import CommonUtils.QueryUtils;
+import CommonUtils.SessionUtils;
 import java.time.YearMonth;
 import java.util.Calendar;
+import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIOutput;
@@ -33,6 +37,11 @@ public class CalendarHelperBean {
         return "<h3>This is a header from java</h3>";
     }
     public String getCalendar() {
+        List<Appointment> appointments;
+        if(SessionUtils.getRole() == "Doctor") {
+            appointments = QueryUtils.getAppointmentList(SessionUtils.getLoggedPersonId());
+        }
+        
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
         String id = request.getParameter("id");
