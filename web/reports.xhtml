@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+    <h:head>
+        <title>MEDAPP - Reports</title>
+    </h:head>
+    
+    <ui:define name="header">
+        <f:metadata>
+            <f:viewAction action="#{reportsBean.onLoad()}" />
+        </f:metadata>
+    </ui:define>
+
+    <ui:include src="common/style.html" />
+
+    <style>
+        label
+        {
+            width: 150px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .inputHolder
+        {
+            width: 50%;
+            font-size: 15px;
+            margin-bottom: 6px;
+            display: inline-block;
+        }
+    </style>
+
+    <h:body>
+        <ui:include src="common/header.html" />
+
+        <div class="middle" id="body">
+            <div class="logoutDiv">
+                <f:view>
+                    <h:form>
+                        <h:commandLink action="#{loginBean.logout}" value="Logout"/>
+                    </h:form>
+                </f:view>
+            </div>
+
+            <div style="font-size: 0px; display: #{reportsBean.displayMode ? 'none' : 'block'}" class="formDisplay">
+                <h:form styleClass="width: 100%;">
+<!--                    <h2 style="font-size: 22px; text-align: center; display: #{patientsBeans.patientDetailsMode ? 'block' : 'none'}">
+                        Patient #{patientsBeans.patient.firstName} #{patientsBeans.patient.lastName}
+                    </h2>-->
+                    <h2 style="font-size: 22px; text-align: center; display: #{reportsBean.createMode ? 'block' : 'none'}">
+                        Add New Report
+                    </h2>
+                    <hr/>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Title"/>
+                        <h:inputText value="#{reportsBean.report.title}" disabled="#{managedBeanBase.loggedInUserPatient}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Description"/>
+                        <h:inputText value="#{reportsBean.report.description}" disabled="#{managedBeanBase.loggedInUserPatient}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Date"/>
+                        <h:inputText value="#{reportsBean.report.date}" disabled="#{managedBeanBase.loggedInUserPatient}">
+                            <f:convertDateTime pattern="dd.MM.yyyy" />
+                        </h:inputText>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Diagnosis"/>
+                        <h:inputText value="#{reportsBean.report.diagnosis}" disabled="#{managedBeanBase.loggedInUserPatient}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Treatment"/>
+                        <h:inputText value="#{reportsBean.report.treatment}" disabled="#{managedBeanBase.loggedInUserPatient}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Attachments"/>
+                        <h:inputText value="#{patientsBeans.patient.phoneNumber}" disabled="#{managedBeanBase.loggedInUserPatient}"/>
+                    </div>
+                    <div class="inputHolder">
+                        <h:outputLabel value="Disease"/>
+                        <h:selectOneMenu value="#{reportsBean.report.disease}"  required="true" disabled="#{managedBeanBase.loggedInUserPatient}">
+                            <f:selectItems value="#{managedBeanBase.diseasesListOfValues}" var="disease" itemValue="#{disease.id}" itemLabel="#{disease.type}"/>
+                        </h:selectOneMenu>
+                    </div>
+                    <hr/>
+                    <div class="actionBar" style="display: #{managedBeanBase.loggedInUserPatient ? 'none' : 'block'}">
+                        <a href="patients.xhtml?faces-redirect=true" target="_self">Back</a>
+                        <h:commandButton value="Save" action="#{reportsBean.save()}"/>
+                    </div>
+                </h:form>
+                </div>
+                
+        </div>
+
+        <ui:include src="common/footer.html" />
+    </h:body>
+</html>

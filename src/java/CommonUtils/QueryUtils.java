@@ -398,6 +398,94 @@ public class QueryUtils {
         return reportList;
     }
 
+    public static Report getReport(String reportId) {
+        Report report = new Report();
+        String query = "select Report_id, Doctor_id, Report_titre, Report_description, "
+                + "Report_attachment, Report_note, Report_diagnosis, Report_treatment, "
+                + "Report_date, Report_comments, Disease_id "
+                + "from Report where Report_id = ?";
+        try {
+            statement = dbConnection.prepareStatement(query);
+            statement.setString(1, reportId);
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                report.setId(result.getString("Report_id"));
+                report.setDate(result.getDate("Report_date"));
+                report.setNotes(result.getString("Report_note"));
+                report.setTitle(result.getString("Report_titre"));
+                report.setDisease(result.getString("Disease_id"));
+                report.setComments(result.getString("Report_comments"));
+                report.setTreatment(result.getString("Report_treatment"));
+                report.setDiagnosis(result.getString("Report_diagnosis"));
+                report.setDescription(result.getString("Report_description"));
+                List<Doctor> doctors = getDoctorList(result.getString("Doctor_id"));
+                if (doctors != null && doctors.size() > 0) {
+                    report.setDoctor(doctors.get(0));
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return report;
+    }
+
+    public static void insertReport(Report report) {
+        String query = "Insert into Report(Report_id, Doctor_id, Report_titre, Report_description, "
+                + "Report_attachment, Report_note, Report_diagnosis, Report_treatment, "
+                + "Report_date, Report_comments, Disease_id "
+                + "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        try {
+            statement = dbConnection.prepareStatement(query);
+            statement.setInt(1, UUID.randomUUID().hashCode());
+            statement.setString(2, report.getDoctor().getId());
+            statement.setString(3, report.getTitle());
+            statement.setString(4, report.getDescription());
+            statement.setString(5, report.getAttachment());
+            statement.setString(6, report.getNotes());
+            statement.setString(7, report.getDiagnosis());
+            statement.setString(8, report.getTreatment());
+            if (report.getDate() != null) {
+                statement.setDate(9, new Date(report.getDate().getTime()));
+            } else {
+                statement.setDate(9, null);
+            }
+            statement.setString(10, report.getComments());
+            statement.setString(11, report.getDisease());
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void updateReport(Report report) {
+        String query = "Update Report set Report_titre = ?, Report_description = ?, "
+                + "Report_attachment = ?, Report_note = ?, Report_diagnosis = ?, Report_treatment = ?, "
+                + "Report_date = ?, Report_comments = ?, Disease_id = ? "
+                + "Where Report_id = ?";
+
+        try {
+            statement = dbConnection.prepareStatement(query);
+            statement.setString(1, report.getTitle());
+            statement.setString(2, report.getDescription());
+            statement.setString(3, report.getAttachment());
+            statement.setString(4, report.getNotes());
+            statement.setString(5, report.getDiagnosis());
+            statement.setString(6, report.getTreatment());
+            if (report.getDate() != null) {
+                statement.setDate(7, new Date(report.getDate().getTime()));
+            } else {
+                statement.setDate(7, null);
+            }
+            statement.setString(8, report.getComments());
+            statement.setString(9, report.getDisease());
+            statement.setString(10, report.getId());
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public static List<Disease> getDiseaseList(String diseaseId) {
         List<Disease> diseasesList = new ArrayList<Disease>();
         String query = "select Disease_id, Disease_description, Disease_type, Disease_note "

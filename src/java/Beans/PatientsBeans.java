@@ -1,5 +1,6 @@
 package Beans;
 
+import BusinessObjects.MedicalFile;
 import BusinessObjects.Patient;
 import CommonUtils.QueryUtils;
 import CommonUtils.SessionUtils;
@@ -15,11 +16,13 @@ import javax.faces.bean.ViewScoped;
 public class PatientsBeans implements Serializable {
 
     private Patient patient;
+    private MedicalFile medicalFile;
     private List<Patient> patientsList;
 
     public PatientsBeans() {
         patient = new Patient();
         patientsList = new ArrayList<Patient>();
+        medicalFile = new MedicalFile();
     }
 
     public List<Patient> getPatientsList() {
@@ -41,6 +44,14 @@ public class PatientsBeans implements Serializable {
     public void getPatientsList(String filter) {
         patientsList = QueryUtils.getPatientList(filter);
     }
+    
+    public MedicalFile getMedicalFile() {
+        return medicalFile;
+    }
+
+    public void setMedicalFile(MedicalFile medicalFile) {
+        this.medicalFile = medicalFile;
+    }
 
     public String getPatientIdFromURL() {
         return SessionUtils.getRequest().getParameter("patientId");
@@ -61,6 +72,7 @@ public class PatientsBeans implements Serializable {
     public void onLoad() {
         if (isPatientDetailsMode()) {
             getSpecifiedPatientDetails(getPatientIdFromURL());
+            getPatientMedicalFile(getPatientIdFromURL());
         } else {
             getPatientsList(null);
         }
@@ -71,6 +83,10 @@ public class PatientsBeans implements Serializable {
         if (patients != null && patients.size() > 0) {
             this.patient = patients.get(0);
         }
+    }
+    
+    public void getPatientMedicalFile(String patientId) {
+        setMedicalFile(QueryUtils.getPatientMedicalFile(patientId));
     }
 
     public void deletePatient(String patientId) {
