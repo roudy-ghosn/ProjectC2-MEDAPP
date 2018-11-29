@@ -1,5 +1,6 @@
 package CommonUtils;
 
+import Beans.HomePageBean;
 import BusinessObjects.Appointment;
 import BusinessObjects.Disease;
 import BusinessObjects.Doctor;
@@ -9,7 +10,12 @@ import BusinessObjects.Person;
 import BusinessObjects.Report;
 import BusinessObjects.Role;
 import BusinessObjects.User;
+import Constants.Constants;
 import DataBase.DBConfig;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.CodeSource;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -18,6 +24,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import javax.swing.JOptionPane;
 
 public class QueryUtils {
 
@@ -629,5 +636,48 @@ public class QueryUtils {
         }
         System.out.println(appointmentList);
         return appointmentList;
+    }
+
+    public static String[] Backupdbtosql() {
+        try {
+            /* Return the files location and backup success/failure */
+            String[] result = new String[2];
+
+            /* Getting path to the Jar file being executed */
+            CodeSource codeSource = DBConfig.class.getProtectionDomain().getCodeSource();
+            File jarFile = new File(codeSource.getLocation().toURI().getPath());
+            String jarDir = jarFile.getParentFile().getPath();
+
+            /* Creating Path Constraints for folder saving */
+            String folderPath = jarDir + "\\backup";
+
+            /* Creating Folder if it does not exist*/
+            File f1 = new File(folderPath);
+            f1.mkdir();
+
+            /* Creating Path Constraints for backup saving */
+            String savePath = "\"" + jarDir + "\\backup\\" + "backup.sql\"";
+            result[0] = savePath;
+
+            /* Used to create a cmd command*/
+            String executeCmd = Constants.mysqldump_dir + " --column-statistics=0 -h " + Constants.db_host + " -u "
+                    + Constants.db_username + " -p" + Constants.db_password + " --add-drop-database -B "
+                    + Constants.db_name + " -r " + savePath;
+
+            /* Executing the command here*/
+            Process runtimeProcess = Runtime.getRuntime().exec(executeCmd);
+            int processComplete = runtimeProcess.waitFor();
+
+            /* processComplete=0 if correctly executed, will contain other values if not*/
+            if (processComplete == 0) {
+                result[1] = "success";
+            } else {
+                result[1] = "failure";
+            }
+            return result;
+        } catch (URISyntaxException | IOException | InterruptedException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 }

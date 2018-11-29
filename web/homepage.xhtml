@@ -8,7 +8,7 @@
     <h:head>
         <title>MEDAPP - Homepage</title>
     </h:head>
-    
+
     <ui:define name="header">
         <f:metadata>
             <f:viewAction action="#{homePageBean.onLoad}" />  
@@ -127,11 +127,21 @@
                 <div class="actionBar">
                     <f:view>
                         <h:form>
-                            <a href="schedule.xhtml" target="_self">view schedule</a>
+                            <a href="schedule.xhtml" target="_self">View Schedule</a>
                         </h:form>
                     </f:view>
                 </div>
-            </div>            
+            </div>
+
+            <div id="adminDiv" style="display: #{managedBeanBase.loggedInUserAdmin ? 'block' : 'none'}">
+                <h:form>
+                    <h:commandLink id="backup" onclick="if (!confirm('Are you sure you want to backup your Data ?'))
+                                        return false" binding="#{homePageBean.backupButton}"
+                                        value="Backup" action="#{homePageBean.backupDatabase()}"/>
+                    <br/>
+                    <h:message for="backup" style="font-weight: bold; margin-top: 10px; display: block;"/>
+                </h:form>
+            </div>
         </div>
 
         <ui:include src="common/footer.html" />
