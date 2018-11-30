@@ -2,7 +2,7 @@
     document.write('<div class="header">');
     document.write('<div class="menu">');
     document.write('<a class="line"></a>');
-    document.write('<a id="homepage" href="homepage.xhtml" target="_self" style="display: #{managedBeanBase.loggedInUserAdmin ? 'none' : 'inline-block'}">Homepage</a>');
+    document.write('<a id="homepage" href="homepage.xhtml" target="_self">Homepage</a>');
     document.write('<a id="patients" href="patients.xhtml" target="_self" style="display: #{managedBeanBase.loggedInUserPatient ? 'none' : 'inline-block'}">Patients</a>');
     document.write('<a id="doctors" href="doctors.xhtml" target="_self">Doctors</a>');
     document.write('<a id="users" href="users.xhtml" target="_self" style="display: #{managedBeanBase.loggedInUserAdmin ? 'inline-block' : 'none'}">Users</a>');

@@ -3,6 +3,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:head>
@@ -27,6 +28,22 @@
             margin-bottom: 6px;
         }
     </style>
+
+    <script type="application/javascript">
+        function downloadLineImage() {
+            var image = PF('chart').exportAsImage();
+            var imageSrc = $(image).attr('src');
+            var url = imageSrc.replace(/^data:image\/[^;]+/, 'data:application/octet-stream');
+            var link = document.createElement('a');
+            
+            link.download = "chart.png";
+            link.href = url;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            return false;
+        }
+    </script>
 
     <h:body>
         <ui:include src="common/header.html" />
@@ -134,13 +151,26 @@
             </div>
 
             <div id="adminDiv" style="display: #{managedBeanBase.loggedInUserAdmin ? 'block' : 'none'}">
+                <p:chart type="line" model="#{chartsBean.lineModel}" style="height:400px;width:600px" widgetVar="chart"/>
                 <h:form>
-                    <h:commandLink id="backup" onclick="if (!confirm('Are you sure you want to backup your Data ?'))
-                                        return false" binding="#{homePageBean.backupButton}"
-                                        value="Backup" action="#{homePageBean.backupDatabase()}"/>
-                    <br/>
-                    <h:message for="backup" style="font-weight: bold; margin-top: 10px; display: block;"/>
+                    <h:commandButton id="login"
+                                     value="Export as image"
+                                     onclick="return downloadLineImage();"
+                                     type="Submit" />
                 </h:form>
+
+                <p:chart type="pie" responsive="true" model="#{chartsBean.model}" />
+                <div class="actionBar">
+                    <f:view>
+                        <h:form>
+                            <h:commandLink id="backup" onclick="if (!confirm('Are you sure you want to backup your Data ?'))
+                                        return false" binding="#{homePageBean.backupButton}"
+                                           value="Backup Database" action="#{homePageBean.backupDatabase()}"/>
+                            <br/>
+                            <h:message for="backup" style="font-weight: bold; margin-top: 10px; display: block;"/>
+                        </h:form>
+                    </f:view>
+                </div>
             </div>
         </div>
 
