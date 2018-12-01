@@ -40,11 +40,11 @@ public class AppointmentReqBean implements Serializable  {
     }  
     
      public static String getPatientIdFromURL() {
-        return SessionUtils.getRequest().getParameter("patientId");
+        return SessionUtils.getLoggedPersonId();
     }
 
     
-     public static AppointmentReq getAppointmentReq() {
+     public AppointmentReq getAppointmentReq() {
         String query = "SELECT `Id`, `Patient_Id`, `Doctor_Id`, `Appointment_type`, `Description`, `Date`, `Time`, `Additional_Notes` FROM `AppointmentReq` "
                 + "WHERE Id = ?";
         
@@ -75,10 +75,11 @@ public class AppointmentReqBean implements Serializable  {
          appReq.setpatientId(patientId);
          
      }
-     public static void save(){
+     public void save(){
          insertAppReq(appReq);
      }
-     public static void updateAppReq(AppointmentReq appReq) {
+    
+     public void updateAppReq(AppointmentReq appReq) {
         String query = "UPDATE `AppointmentReq` \n" +
             "	SET \n" +
             "	`Appointment_type`=?,\n" +
@@ -98,7 +99,7 @@ public class AppointmentReqBean implements Serializable  {
             ex.printStackTrace();
         }
     }
-     public static void insertAppReq(AppointmentReq appReq) {
+     public void insertAppReq(AppointmentReq appReq) {
         String query = "INSERT INTO `AppointmentReq`(`Patient_Id`, `Doctor_Id`, `Appointment_type`, `Description`, `Date`, `Time`, `Additional_Notes`) \n" +
             "	VALUES (?,?,?,?,?,?,?)";
         try {

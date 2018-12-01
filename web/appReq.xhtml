@@ -47,7 +47,7 @@
             </div>
 
             <!-- Specific Patient Details -->
-            <div style="font-size: 0px; display: #{patientsBeans.displayMode ? 'none' : 'block'}" class="formDisplay">
+            <div style="font-size: 0px; " class="formDisplay">
                 <h:form styleClass="width: 100%;">
                     <h2 style="font-size: 22px; text-align: center; display: #{patientsBeans.patientDetailsMode ? 'block' : 'none'}">
                         Patient #{patientsBeans.patient.firstName} #{patientsBeans.patient.lastName}
@@ -59,33 +59,33 @@
                    
                     <div class="inputHolder">
                         <h:outputLabel value="Appointment Date"/>
-                        <h:inputText value="#{appointmentReqBean.getAppointmentReq().appDate}" disabled="#{managedBeanBase.loggedInUserPatient}">
+                        <h:inputText value="#{appointmentReqBean.getAppointmentReq().appDate}" >
                             <f:convertDateTime pattern="dd.MM.yyyy" />
                         </h:inputText>
                     </div>
                      <div class="inputHolder">
                         <h:outputLabel value="Appointment Time"/>
-                        <h:inputText value="#{appointmentReqBean.getAppointmentReq().appTime}" disabled="#{managedBeanBase.loggedInUserPatient}">
+                        <h:inputText value="#{appointmentReqBean.getAppointmentReq().appTime}" >
                         </h:inputText>
                     </div>
                      <div class="inputHolder">
                         <h:outputLabel value="Doctor"/>
-                        <h:selectOneMenu value="#{appointmentReqBean.getAppointmentReq().doctorId}"  required="true" disabled="#{managedBeanBase.loggedInUserPatient}">
+                        <h:selectOneMenu value="#{appointmentReqBean.getAppointmentReq().doctorId}"  required="true" >
                             <f:selectItems value="#{managedBeanBase.doctorsListOfValues}" var="doctor" itemValue="#{doctor.id}" itemLabel="#{doctor.firstName} #{doctor.lastName}"/>
                         </h:selectOneMenu>
                     </div>
                     <hr/>
                       <div class="inputHolder">
                         <h:outputLabel value="Appointment Type"/>
-                        <h:inputText value="#{appointmentReqBean.getAppointmentReq().type}" disabled="#{managedBeanBase.loggedInUserPatient}">
+                        <h:inputText value="#{appointmentReqBean.getAppointmentReq().type}" >
                         </h:inputText>
                     </div>
                      <div class="inputHolder">
                         <h:outputLabel value="Appointment Description"/>
-                        <h:inputText value="#{appointmentReqBean.getAppointmentReq().state}" disabled="#{managedBeanBase.loggedInUserPatient}">
+                        <h:inputText value="#{appointmentReqBean.getAppointmentReq().state}" >
                         </h:inputText>
                     </div>
-                    <div class="actionBar" style="display: #{managedBeanBase.loggedInUserPatient ? 'none' : 'block'}">
+                    <div class="actionBar" style="display: 'block'}">
                         <a href="patients.xhtml?faces-redirect=true" target="_self">Back</a>
                         <h:commandButton value="Save" action="#{appointmentReqBean.save()}"/>
                     </div>
