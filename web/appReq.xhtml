@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+    <h:head>
+        <title>MEDAPP - AppRequest</title>
+    </h:head>
+
+    <ui:define name="header">
+        <f:metadata>
+            <f:viewAction action="#{appointmentReqBean.onLoad()}" />
+        </f:metadata>
+    </ui:define>
+
+    <ui:include src="common/style.html" />
+
+    <style>
+        label
+        {
+            width: 150px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .inputHolder
+        {
+            width: 50%;
+            font-size: 15px;
+            margin-bottom: 6px;
+            display: inline-block;
+        }
+    </style>
+
+    <h:body>
+        <ui:include src="common/header.html" />
+
+        <div class="middle" id="body">
+            <div class="logoutDiv">
+                <f:view>
+                    <h:form>
+                        <h:commandLink action="#{loginBean.logout}" value="Logout"/>
+                    </h:form>
+                </f:view>
+            </div>
+
+            <!-- Specific Patient Details -->
+            <div style="font-size: 0px; display: #{patientsBeans.displayMode ? 'none' : 'block'}" class="formDisplay">
+                <h:form styleClass="width: 100%;">
+                    <h2 style="font-size: 22px; text-align: center; display: #{patientsBeans.patientDetailsMode ? 'block' : 'none'}">
+                        Patient #{patientsBeans.patient.firstName} #{patientsBeans.patient.lastName}
+                    </h2>
+                    <h2 style="font-size: 22px; text-align: center; display: #{patientsBeans.createMode ? 'block' : 'none'}">
+                        Add New Patient
+                    </h2>
+                    <hr/>
+                   
+                    <div class="inputHolder">
+                        <h:outputLabel value="Appointment Date"/>
+                        <h:inputText value="#{appointmentReqBean.getAppointmentReq().appDate}" disabled="#{managedBeanBase.loggedInUserPatient}">
+                            <f:convertDateTime pattern="dd.MM.yyyy" />
+                        </h:inputText>
+                    </div>
+                     <div class="inputHolder">
+                        <h:outputLabel value="Appointment Time"/>
+                        <h:inputText value="#{appointmentReqBean.getAppointmentReq().appTime}" disabled="#{managedBeanBase.loggedInUserPatient}">
+                        </h:inputText>
+                    </div>
+                     <div class="inputHolder">
+                        <h:outputLabel value="Doctor"/>
+                        <h:selectOneMenu value="#{appointmentReqBean.getAppointmentReq().doctorId}"  required="true" disabled="#{managedBeanBase.loggedInUserPatient}">
+                            <f:selectItems value="#{managedBeanBase.doctorsListOfValues}" var="doctor" itemValue="#{doctor.id}" itemLabel="#{doctor.firstName} #{doctor.lastName}"/>
+                        </h:selectOneMenu>
+                    </div>
+                    <hr/>
+                      <div class="inputHolder">
+                        <h:outputLabel value="Appointment Type"/>
+                        <h:inputText value="#{appointmentReqBean.getAppointmentReq().type}" disabled="#{managedBeanBase.loggedInUserPatient}">
+                        </h:inputText>
+                    </div>
+                     <div class="inputHolder">
+                        <h:outputLabel value="Appointment Description"/>
+                        <h:inputText value="#{appointmentReqBean.getAppointmentReq().state}" disabled="#{managedBeanBase.loggedInUserPatient}">
+                        </h:inputText>
+                    </div>
+                    <div class="actionBar" style="display: #{managedBeanBase.loggedInUserPatient ? 'none' : 'block'}">
+                        <a href="patients.xhtml?faces-redirect=true" target="_self">Back</a>
+                        <h:commandButton value="Save" action="#{appointmentReqBean.save()}"/>
+                    </div>
+                </h:form>
+            </div>
+
+        </div>
+
+        <ui:include src="common/footer.html" />
+    </h:body>
+</html>
