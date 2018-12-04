@@ -34,6 +34,12 @@ import javax.servlet.http.HttpServletRequest;
 @SessionScoped
 public class CalendarHelperBean {
     private String test = "This is from the bean!";
+    int x = 2;
+
+    public int getX() {
+        return x;
+    }
+    
     public String getTest() {
         YearMonth yearMonthObject = YearMonth.now();
         int daysInMonth = yearMonthObject.lengthOfMonth();
@@ -94,9 +100,11 @@ public class CalendarHelperBean {
 
         int myMonth = calendar.get(Calendar.MONTH);
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
-        LocalDateTime dateTime = LocalDateTime.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE));
+//        calendar.add(Calendar.MONTH, 1);
+        LocalDateTime dateTime = LocalDateTime.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE));
         String thisMonthString = format.format(dateTime);
         thisMonthString = thisMonthString.substring(0, 7);
+//        calendar.add(Calendar.MONTH, -1);
         
         ArrayList<Appointment> appoToRemove = new ArrayList<>();
         for(Iterator<Appointment> it = appointments.iterator(); it.hasNext();) {
