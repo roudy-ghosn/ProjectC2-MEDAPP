@@ -1,5 +1,6 @@
 package CommonUtils;
 
+import Beans.HomePageBean;
 import BusinessObjects.Appointment;
 import BusinessObjects.Disease;
 import BusinessObjects.Doctor;
@@ -9,7 +10,12 @@ import BusinessObjects.Person;
 import BusinessObjects.Report;
 import BusinessObjects.Role;
 import BusinessObjects.User;
+import Constants.Constants;
 import DataBase.DBConfig;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.CodeSource;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -18,6 +24,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import javax.swing.JOptionPane;
 
 public class QueryUtils {
 
@@ -597,7 +604,7 @@ public class QueryUtils {
         return patientList;
     }
 
-    public static List<Appointment> getAppointmentList(String doctorId) {
+    public static List<Appointment> getAllAppointments(String doctorId) {
         List<Appointment> appointmentList = new ArrayList<Appointment>();
         String query = "select Appoitment_id, Doctor_id, Patient_id, Appoitment_date, Appoitment_time, Appoitment_note "
                 + "from Appointment "
@@ -628,7 +635,103 @@ public class QueryUtils {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        System.out.println(appointmentList);
         return appointmentList;
+    }
+    
+    public static List<Appointment> getAppointmentList(String doctorId) {
+        List<Appointment> appointmentList = new ArrayList<Appointment>();
+        String query = "select Appoitment_id, Doctor_id, Patient_id, Appoitment_date, Appoitment_time, Appoitment_note "
+                + "from Appointment "
+                + "where (Doctor_id = ? "
+                + "and Appoitment_date = '" + java.time.LocalDate.now() + "')";
+        try {
+            statement = dbConnection.prepareStatement(query);
+            statement.setString(1, doctorId);
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                Appointment appointment = new Appointment();
+                appointment.setId(result.getString("Appoitment_id"));
+                List<Doctor> doctors = getDoctorList(result.getString("Doctor_id"));
+                if (doctors != null && doctors.size() > 0) {
+                    appointment.setDoctor(doctors.get(0));
+                }
+                List<Patient> patients = getPatientList(result.getString("Patient_id"));
+                if (patients != null && patients.size() > 0) {
+                    appointment.setPatient(patients.get(0));
+                }
+                appointment.setDate(result.getDate("Appoitment_date"));
+                appointment.setTime(result.getString("Appoitment_time"));
+                appointment.setNotes(result.getString("Appoitment_note"));
+                appointmentList.add(appointment);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return appointmentList;
+    }
+
+    /* DataBase Backup Procedure */
+    public static String[] Backupdbtosql() {
+        try {
+            /* Return the files location and backup success/failure */
+            String[] result = new String[2];
+
+            /* Getting path to the Jar file being executed */
+            CodeSource codeSource = DBConfig.class.getProtectionDomain().getCodeSource();
+            File jarFile = new File(codeSource.getLocation().toURI().getPath());
+            String jarDir = jarFile.getParentFile().getPath();
+
+            /* Creating Path Constraints for folder saving */
+            String folderPath = jarDir + "\\backup";
+
+            /* Creating Folder if it does not exist*/
+            File f1 = new File(folderPath);
+            f1.mkdir();
+
+            /* Creating Path Constraints for backup saving */
+            String savePath = "\"" + jarDir + "\\backup\\" + "backup.sql\"";
+            result[0] = savePath;
+
+            /* Used to create a cmd command*/
+            String executeCmd = Constants.mysqldump_dir + " --column-statistics=0 -h " + Constants.db_host + " -u "
+                    + Constants.db_username + " -p" + Constants.db_password + " --add-drop-database -B "
+                    + Constants.db_name + " -r " + savePath;
+
+            /* Executing the command here*/
+            Process runtimeProcess = Runtime.getRuntime().exec(executeCmd);
+            int processComplete = runtimeProcess.waitFor();
+
+            /* processComplete=0 if correctly executed, will contain other values if not*/
+            if (processComplete == 0) {
+                result[1] = "success";
+            } else {
+                result[1] = "failure";
+            }
+            return result;
+        } catch (URISyntaxException | IOException | InterruptedException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    /* Charts Data */
+    public static String[] getPatientsDistributionByGender() {
+        String[] results = new String[2];
+        String query = "SELECT m.male maleCount, f.female femaleCount"
+                     + "  FROM (SELECT COUNT(*) male FROM Persons m WHERE Person_gender = 'M') m"
+                          + ", (SELECT COUNT(*) female FROM Persons WHERE Person_gender = 'F') f";
+        try {
+            statement = dbConnection.prepareStatement(query);
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                results[0] = result.getString("maleCount");
+                results[1] = result.getString("femaleCount");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return results;
     }
 }

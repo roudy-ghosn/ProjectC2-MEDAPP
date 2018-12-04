@@ -7,8 +7,10 @@ import CommonUtils.QueryUtils;
 import CommonUtils.SessionUtils;
 import java.io.Serializable;
 import java.util.List;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 @ManagedBean
 @SessionScoped
@@ -29,21 +31,22 @@ public class ManagedBeanBase implements Serializable {
     public String getGenderDescription(String gender) {
         if ("M".equals(gender)) {
             return Gender.Male.name();
-        } else if("F".equals(gender)){
+        } else if ("F".equals(gender)) {
             return Gender.Female.name();
         }
         return null;
     }
-
+    
     /* Common LOVs */
     public Gender[] getGenderListOfValues() {
         return Gender.values();
     }
-    
-    public List<Doctor> getDoctorsListOfValues(){
+
+    public List<Doctor> getDoctorsListOfValues() {
         return QueryUtils.getDoctorList(null);
     }
-    public List<Disease> getDiseasesListOfValues(){
+
+    public List<Disease> getDiseasesListOfValues() {
         return QueryUtils.getDiseaseList(null);
     }
 }

@@ -2,11 +2,11 @@
     document.write('<div class="header">');
     document.write('<div class="menu">');
     document.write('<a class="line"></a>');
-    document.write('<a href="homepage.xhtml" target="_self" style="display: #{managedBeanBase.loggedInUserAdmin ? 'none' : 'inline-block'}">Homepage</a>');
-    document.write('<a href="patients.xhtml" target="_self" style="display: #{managedBeanBase.loggedInUserPatient ? 'none' : 'inline-block'}">Patients</a>');
-    document.write('<a href="doctors.xhtml" target="_self">Doctors</a>');
-    document.write('<a href="users.xhtml" target="_self" style="display: #{managedBeanBase.loggedInUserAdmin ? 'inline-block' : 'none'}">Users</a>');
-    document.write('<a href="profile.xhtml" target="_self">Profile</a>');
+    document.write('<a id="homepage" href="homepage.xhtml" target="_self">Homepage</a>');
+    document.write('<a id="patients" href="patients.xhtml" target="_self" style="display: #{managedBeanBase.loggedInUserPatient ? 'none' : 'inline-block'}">Patients</a>');
+    document.write('<a id="doctors" href="doctors.xhtml" target="_self">Doctors</a>');
+    document.write('<a id="users" href="users.xhtml" target="_self" style="display: #{managedBeanBase.loggedInUserAdmin ? 'inline-block' : 'none'}">Users</a>');
+    document.write('<a id="profile" href="profile.xhtml" target="_self">Profile</a>');
     document.write('<a class="line"></a>');
     document.write('</div>');
     document.write('</div>');
@@ -14,5 +14,24 @@
     window.onload = window.onresize = function ()
     {
         document.getElementById("body").style.minHeight = (window.innerHeight - 140) + "px";
+        
+        var view = "#{view.viewId}";
+        switch(view) {
+            case "/homepage.xhtml":
+                document.getElementById("homepage").className = "selected";
+                break;
+            case "/patients.xhtml":
+                document.getElementById("patients").className = "selected";
+                break;
+            case "/doctors.xhtml":
+                document.getElementById("doctors").className  = "selected";
+                break;
+            case "/users.xhtml":
+                document.getElementById("users").className    = "selected";
+                break;
+            case "/profile.xhtml":
+                document.getElementById("profile").className  = "selected";
+                break;
+        }
     }
 </script>

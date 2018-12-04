@@ -39,11 +39,7 @@ public class LoginBean implements Serializable {
 
     public String login() {
         if (QueryUtils.validateLogin(getUsername(), getPassword())) {
-            if (SessionUtils.isUserAdmin()) {
-                return "patients?faces-redirect=true";
-            } else {
-                return "homepage?faces-redirect=true";
-            }
+            return "homepage?faces-redirect=true";
         } else {
             setErrorText("Login Failed! Incorrect username/passowrd, Please try again");
         }

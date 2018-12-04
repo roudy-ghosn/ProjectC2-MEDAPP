@@ -9,6 +9,7 @@ import BusinessObjects.Appointment;
 import CommonUtils.QueryUtils;
 import CommonUtils.SessionUtils;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
+import java.text.DateFormatSymbols;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.YearMonth;
@@ -66,7 +67,19 @@ public class CalendarHelperBean {
 //            }
         }
         
-        String finalHTML = "<ul class=\"weekdays\">\n" +
+        
+        
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.add(Calendar.MONTH, monthShift);
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        int myMonth = calendar.get(Calendar.MONTH);
+        
+        String finalHTML = "";
+        
+        finalHTML += "<h3>" + new DateFormatSymbols().getMonths()[myMonth] + " " + calendar.get(Calendar.YEAR) + "</h3>";
+        
+        finalHTML += "<ul class=\"weekdays\">\n" +
 "                    <li>Sunday</li>\n" +
 "                    <li>Monday</li>\n" +
 "                    <li>Tuesday</li>\n" +
@@ -75,12 +88,6 @@ public class CalendarHelperBean {
 "                    <li>Friday</li>\n" +
 "                    <li>Saturday</li>\n" +
 "                </ul>";
-        
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        calendar.add(Calendar.MONTH, monthShift);
-        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        
         
         finalHTML += "<ul class=\"days\">";
         
@@ -95,10 +102,10 @@ public class CalendarHelperBean {
         String role = SessionUtils.getRole();
         String userID = SessionUtils.getLoggedPersonId();
         if(role.equals("Doctor")) {
-            appointments = QueryUtils.getAppointmentList(userID);
+            appointments = QueryUtils.getAllAppointments(userID);
         }
 
-        int myMonth = calendar.get(Calendar.MONTH);
+        
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
 //        calendar.add(Calendar.MONTH, 1);
         LocalDateTime dateTime = LocalDateTime.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE));
@@ -128,6 +135,7 @@ public class CalendarHelperBean {
           }
           finalHTML += "<li class=\"day\">\n" +
 "                        <div class=\"date\">"+ calendar.get(Calendar.DAY_OF_MONTH)  +"</div>                      \n";
+          
           
           LocalDateTime date1 = LocalDateTime.ofInstant(calendar.getTime().toInstant(), ZoneId.systemDefault());
             for(Iterator<Appointment> it = appointments.iterator(); it.hasNext();) {

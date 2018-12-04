@@ -1,10 +1,12 @@
 package BusinessObjects;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Person implements Serializable {
-    
+
     private String id;
     private String firstName;
     private String lastName;
@@ -37,7 +39,7 @@ public class Person implements Serializable {
     public void setGender(String gender) {
         this.gender = gender;
     }
-    
+
     public String getLastName() {
         return lastName;
     }
@@ -148,5 +150,15 @@ public class Person implements Serializable {
 
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public Integer getAge() {
+        if (getDateOfBirth() != null) {
+            DateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+            int d1 = Integer.parseInt(formatter.format(getDateOfBirth()));
+            int d2 = Integer.parseInt(formatter.format(new Date()));
+            return (d2 - d1) / 10000;
+        }
+        return null;
     }
 }

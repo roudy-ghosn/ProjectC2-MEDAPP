@@ -3,12 +3,13 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:head>
         <title>MEDAPP - Homepage</title>
     </h:head>
-    
+
     <ui:define name="header">
         <f:metadata>
             <f:viewAction action="#{homePageBean.onLoad}" />  
@@ -27,6 +28,22 @@
             margin-bottom: 6px;
         }
     </style>
+
+    <script type="application/javascript">
+        function exportPatientsDistributionByGenderModelImage() {
+            var image = PF('patientsDistributionByGenderModel').exportAsImage();
+            var imageSrc = $(image).attr('src');
+            var url = imageSrc.replace(/^data:image\/[^;]+/, 'data:application/octet-stream');
+            var link = document.createElement('a');
+
+            link.download = "patientsDistributionByGenderModel.png";
+            link.href = url;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            return false;
+        }
+    </script>
 
     <h:body>
         <ui:include src="common/header.html" />
@@ -127,11 +144,52 @@
                 <div class="actionBar">
                     <f:view>
                         <h:form>
-                            <a href="schedule.xhtml" target="_self">view schedule</a>
+                            <a href="schedule.xhtml" target="_self">View Schedule</a>
                         </h:form>
                     </f:view>
                 </div>
-            </div>            
+            </div>
+
+            <div id="adminDiv" style="display: #{managedBeanBase.loggedInUserAdmin ? 'block' : 'none'};">
+<!--                <h:form>
+                    <div class="chartsSpanHolder">
+                        <span class="chartsSpan">
+                            <p:chart type="pie" responsive="true" model="#{chartsBean.patientsDistributionByGenderModel}" widgetVar="patientsDistributionByGenderModel"/>
+                            <h:commandButton value="Export as image" onclick="return exportPatientsDistributionByGenderModelImage();" type="Submit"/>
+                        </span>
+
+                        <span class="chartsSeparator"></span>
+
+                        <span class="chartsSpan">
+                            <p:chart type="pie" responsive="true" model="#{chartsBean.patientsDistributionByGenderModel}"/>
+                        </span>
+                    </div>
+
+                    <div class="chartsSpanHolder">
+                        <span class="chartsSpan">
+                            <p:chart type="line" model="#{chartsBean.lineModel}" style="height:400px; width:800px"/>
+                        </span>
+
+                        <span class="chartsSeparator"></span>
+
+                        <span class="chartsSpan">
+                            <p:chart type="line" model="#{chartsBean.lineModel}" style="height:400px; width:800px"/>
+                        </span>
+                    </div>
+                </h:form>-->
+
+                <div class="actionBar" style="margin-top: 40px;">
+                    <f:view>
+                        <h:form>
+                            <h:commandLink id="backup" onclick="if (!confirm('Are you sure you want to backup your Data ?'))
+                                        return false" binding="#{homePageBean.backupButton}"
+                                           value="Backup Database" action="#{homePageBean.backupDatabase()}"/>
+                            <br/>
+                            <h:message for="backup" style="font-weight: bold; margin-top: 10px; display: block;"/>
+                        </h:form>
+                    </f:view>
+                </div>
+            </div>
         </div>
 
         <ui:include src="common/footer.html" />
