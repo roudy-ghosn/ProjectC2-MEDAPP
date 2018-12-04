@@ -30,13 +30,13 @@
     </style>
 
     <script type="application/javascript">
-        function downloadLineImage() {
-            var image = PF('chart').exportAsImage();
+        function exportPatientsDistributionByGenderModelImage() {
+            var image = PF('patientsDistributionByGenderModel').exportAsImage();
             var imageSrc = $(image).attr('src');
             var url = imageSrc.replace(/^data:image\/[^;]+/, 'data:application/octet-stream');
             var link = document.createElement('a');
-            
-            link.download = "chart.png";
+
+            link.download = "patientsDistributionByGenderModel.png";
             link.href = url;
             document.body.appendChild(link);
             link.click();
@@ -150,17 +150,35 @@
                 </div>
             </div>
 
-            <div id="adminDiv" style="display: #{managedBeanBase.loggedInUserAdmin ? 'block' : 'none'}">
-                <p:chart type="line" model="#{chartsBean.lineModel}" style="height:400px;width:600px" widgetVar="chart"/>
+            <div id="adminDiv" style="display: #{managedBeanBase.loggedInUserAdmin ? 'block' : 'none'};">
                 <h:form>
-                    <h:commandButton id="login"
-                                     value="Export as image"
-                                     onclick="return downloadLineImage();"
-                                     type="Submit" />
+                    <div class="chartsSpanHolder">
+                        <span class="chartsSpan">
+                            <p:chart type="pie" responsive="true" model="#{chartsBean.patientsDistributionByGenderModel}" widgetVar="patientsDistributionByGenderModel"/>
+                            <h:commandButton value="Export as image" onclick="return exportPatientsDistributionByGenderModelImage();" type="Submit"/>
+                        </span>
+
+                        <span class="chartsSeparator"></span>
+
+                        <span class="chartsSpan">
+                            <p:chart type="pie" responsive="true" model="#{chartsBean.patientsDistributionByGenderModel}"/>
+                        </span>
+                    </div>
+
+                    <div class="chartsSpanHolder">
+                        <span class="chartsSpan">
+                            <p:chart type="line" model="#{chartsBean.lineModel}" style="height:400px; width:800px"/>
+                        </span>
+
+                        <span class="chartsSeparator"></span>
+
+                        <span class="chartsSpan">
+                            <p:chart type="line" model="#{chartsBean.lineModel}" style="height:400px; width:800px"/>
+                        </span>
+                    </div>
                 </h:form>
 
-                <p:chart type="pie" responsive="true" model="#{chartsBean.model}" />
-                <div class="actionBar">
+                <div class="actionBar" style="margin-top: 40px;">
                     <f:view>
                         <h:form>
                             <h:commandLink id="backup" onclick="if (!confirm('Are you sure you want to backup your Data ?'))

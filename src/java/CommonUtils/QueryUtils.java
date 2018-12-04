@@ -634,10 +634,10 @@ public class QueryUtils {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        System.out.println(appointmentList);
         return appointmentList;
     }
 
+    /* DataBase Backup Procedure */
     public static String[] Backupdbtosql() {
         try {
             /* Return the files location and backup success/failure */
@@ -679,5 +679,25 @@ public class QueryUtils {
             ex.printStackTrace();
         }
         return null;
+    }
+
+    /* Charts Data */
+    public static String[] getPatientsDistributionByGender() {
+        String[] results = new String[2];
+        String query = "SELECT m.male maleCount, f.female femaleCount"
+                     + "  FROM (SELECT COUNT(*) male FROM Persons m WHERE Person_gender = 'M') m"
+                          + ", (SELECT COUNT(*) female FROM Persons WHERE Person_gender = 'F') f";
+        try {
+            statement = dbConnection.prepareStatement(query);
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                results[0] = result.getString("maleCount");
+                results[1] = result.getString("femaleCount");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return results;
     }
 }

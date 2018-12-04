@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Beans;
 
 import BusinessObjects.Patient;
@@ -20,15 +15,25 @@ import javax.faces.bean.ViewScoped;
 
 @ManagedBean
 @ViewScoped
-public class ChartsBean {
+public class ChartsBean extends ManagedBeanBase {
 
-    private PieChartModel model;
     private LineChartModel lineModel;
+    private PieChartModel patientsDistributionByGenderModel;
 
     @PostConstruct
     public void init() {
-        drawPatientAgeLineChart();
-        drawPatientDiseasePieChart();
+        if (isLoggedInUserAdmin()) {
+            drawPatientAgeLineChart();
+            drawPatientsDistributionByGenderModel();
+        }
+    }
+
+    public LineChartModel getLineModel() {
+        return lineModel;
+    }
+
+    public PieChartModel getPatientsDistributionByGenderModel() {
+        return patientsDistributionByGenderModel;
     }
 
     public void drawPatientAgeLineChart() {
@@ -43,7 +48,7 @@ public class ChartsBean {
             for (Patient patient : patientsList) {
                 s.set(counter++, patient.getAge());
             }
-            
+
             lineModel.addSeries(s);
             lineModel.setLegendPosition("e");
             Axis y = lineModel.getAxis(AxisType.Y);
@@ -59,38 +64,26 @@ public class ChartsBean {
         }
     }
 
-    public void drawPatientDiseasePieChart() {
-        model = new PieChartModel();
-        model.set("Java", 62);
-        model.set("Python", 46);
-        model.set("JavaScript", 38);
-        model.set("C++", 31);
-        model.set("C#", 27);
-        model.set("PHP", 14);
-        model.set("Perl", 14);
+    public void drawPatientsDistributionByGenderModel() {
+        patientsDistributionByGenderModel = new PieChartModel();
+        
+        String[] results = new String[2];
+        results = QueryUtils.getPatientsDistributionByGender();
+       
+        patientsDistributionByGenderModel.set("Male", new Integer(results[0]));
+        patientsDistributionByGenderModel.set("Female", new Integer(results[1]));
 
-        //followings are some optional customizations:
         //set title
-        model.setTitle("2018 Jobs for top languages");
+        patientsDistributionByGenderModel.setTitle("Patients Distribution by Gender");
         //set legend position to 'e' (east), other values are 'w', 's' and 'n'
-        model.setLegendPosition("e");
-        //enable tooltips
-        model.setShowDatatip(true);
+        patientsDistributionByGenderModel.setLegendPosition("e");
         //show labels inside pie chart
-        model.setShowDataLabels(true);
+        patientsDistributionByGenderModel.setShowDataLabels(true);
         //show label text  as 'value' (numeric) , others are 'label', 'percent' (default). Only one can be used.
-        model.setDataFormat("value");
+        patientsDistributionByGenderModel.setDataFormat("percent");
         //format: %d for 'value', %s for 'label', %d%% for 'percent'
-        model.setDataLabelFormatString("%dK");
+        patientsDistributionByGenderModel.setDataLabelFormatString("%d%%");
         //pie sector colors
-        model.setSeriesColors("aaf,afa,faa,ffa,aff,faf,ddd");
-    }
-
-    public PieChartModel getModel() {
-        return model;
-    }
-
-    public LineChartModel getLineModel() {
-        return lineModel;
+        patientsDistributionByGenderModel.setSeriesColors("3282BD,9ECAE1");
     }
 }
