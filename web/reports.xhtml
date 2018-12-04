@@ -46,11 +46,11 @@
                 </f:view>
             </div>
 
-            <div style="font-size: 0px; display: #{reportsBean.displayMode ? 'none' : 'block'}" class="formDisplay">
+            <div style="font-size: 0px;" class="formDisplay">
                 <h:form styleClass="width: 100%;">
-<!--                    <h2 style="font-size: 22px; text-align: center; display: #{patientsBeans.patientDetailsMode ? 'block' : 'none'}">
+                    <h2 style="font-size: 22px; text-align: center; display: #{patientsBeans.patientDetailsMode ? 'block' : 'none'}">
                         Patient #{patientsBeans.patient.firstName} #{patientsBeans.patient.lastName}
-                    </h2>-->
+                    </h2>
                     <h2 style="font-size: 22px; text-align: center; display: #{reportsBean.createMode ? 'block' : 'none'}">
                         Add New Report
                     </h2>
@@ -86,6 +86,9 @@
                         <h:selectOneMenu value="#{reportsBean.report.disease}"  required="true" disabled="#{managedBeanBase.loggedInUserPatient}">
                             <f:selectItems value="#{managedBeanBase.diseasesListOfValues}" var="disease" itemValue="#{disease.id}" itemLabel="#{disease.type}"/>
                         </h:selectOneMenu>
+                    </div>
+                    <div class="inputHolder" style="visibility: hidden; display:inline;">
+                        <h:inputText value="#{reportsBean.report.doctor}" disabled="#{managedBeanBase.loggedInUserPatient}"/>
                     </div>
                     <hr/>
                     <div class="actionBar" style="display: #{managedBeanBase.loggedInUserPatient ? 'none' : 'block'}">

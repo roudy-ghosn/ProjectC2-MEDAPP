@@ -25,6 +25,7 @@ public class Person implements Serializable {
     private String action;
 
     public String getId() {
+        System.out.println(id);
         return id;
     }
 

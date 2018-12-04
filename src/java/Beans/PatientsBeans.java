@@ -54,6 +54,7 @@ public class PatientsBeans implements Serializable {
     }
 
     public String getPatientIdFromURL() {
+         System.out.println(SessionUtils.getRequest());
         return SessionUtils.getRequest().getParameter("patientId");
     }
 

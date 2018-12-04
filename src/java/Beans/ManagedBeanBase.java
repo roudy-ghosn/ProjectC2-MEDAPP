@@ -27,6 +27,9 @@ public class ManagedBeanBase implements Serializable {
     public boolean isLoggedInUserPatient() {
         return SessionUtils.isUserPatient();
     }
+    public String getLoggedInUserId() {
+        return  SessionUtils.getLoggedPersonId();
+    }
 
     public String getGenderDescription(String gender) {
         if ("M".equals(gender)) {

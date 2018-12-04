@@ -38,7 +38,7 @@ public class ReportsBean implements Serializable {
    
     
     public String getReportIdFromURL() {
-        return SessionUtils.getRequest().getParameter("patientId");
+        return SessionUtils.getRequest().getParameter("reportId");
     }
     
     public void getSpecifiedReport(String id){
@@ -54,7 +54,11 @@ public class ReportsBean implements Serializable {
     }
     
     public void onLoad() {
+        if(isCreateMode()){
+            report = new Report();
+        }else{
        getSpecifiedReport(getReportIdFromURL());
+        }
     }
     
     

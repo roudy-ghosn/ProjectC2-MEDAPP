@@ -57,6 +57,10 @@ public class HomePageBean implements Serializable {
     public String getUserFullname() {
         return SessionUtils.getFirstName() + " " + SessionUtils.getLastName();
     }
+    
+    public String getLoggedInUserId() {
+        return SessionUtils.getLoggedPersonId();
+    }
 
     public void getTodayAppointment() {
         setAppointmentList(QueryUtils.getAppointmentList(SessionUtils.getLoggedPersonId()));

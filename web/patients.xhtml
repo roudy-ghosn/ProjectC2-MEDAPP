@@ -158,6 +158,7 @@
                     </h:dataTable>
                     
                     <div class="actionBar" style="display: #{managedBeanBase.loggedInUserPatient ? 'none' : 'block'}">
+                        <a href="reports.xhtml?createMode" target="_self">Add New Report</a>
                         <a href="patients.xhtml?faces-redirect=true" target="_self">Back</a>
                         <h:commandButton value="Save" action="#{patientsBeans.save()}"/>
                     </div>
