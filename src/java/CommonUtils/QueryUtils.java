@@ -22,7 +22,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import javax.swing.JOptionPane;
 
@@ -728,6 +730,54 @@ public class QueryUtils {
             while (result.next()) {
                 results[0] = result.getString("maleCount");
                 results[1] = result.getString("femaleCount");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return results;
+    }
+    
+    public static Map<String, String[]> getDiseaseDistribution(String year) {
+        Map<String, String[]> results = new HashMap<String, String[]>();
+        String query = "SELECT Report.Disease_id, Diseases.Disease_description, count(*) counter "
+                + "FROM Report, Diseases "
+                + "Where Report.Disease_id = Diseases.Disease_id "
+                + "  And YEAR(Report.Report_date) = ? "
+                + "Group by Disease_id";
+        try {
+            statement = dbConnection.prepareStatement(query);
+            statement.setString(1, year);
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                String[] disease = new String[2];
+                disease[0] = result.getString("Disease_description");
+                disease[1] = result.getString("counter");
+                results.put(result.getString("Disease_id"), disease);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return results;
+    }
+
+    public static Map<String, String[]> getUsersDistributionForPast5Years(String year) {
+        Map<String, String[]> results = new HashMap<String, String[]>();
+        String query = "Select year(Users.User_creationDate) creationDate, count(*) counter"
+                     + "  From Users"
+                     + " Where YEAR(Users.User_creationDate) <= ? "
+                    + " Group By year(Users.User_creationDate)"
+                     + " Limit 5";
+        try {
+            statement = dbConnection.prepareStatement(query);
+            statement.setString(1, year);
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                String[] disease = new String[2];
+                disease[0] = result.getString("creationDate");
+                disease[1] = result.getString("counter");
+                results.put(result.getString("creationDate"), disease);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();

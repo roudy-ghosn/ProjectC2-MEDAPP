@@ -2,7 +2,13 @@ package Beans;
 
 import BusinessObjects.Patient;
 import CommonUtils.QueryUtils;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.LineChartModel;
@@ -17,59 +23,77 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped
 public class ChartsBean extends ManagedBeanBase {
 
-    private LineChartModel lineModel;
+    String year = new SimpleDateFormat("yyyy").format(new Date());
+
+    private PieChartModel diseaseDistributionModel;
     private PieChartModel patientsDistributionByGenderModel;
+
+    private LineChartModel usersDistributionForPast5YearsChart;
 
     @PostConstruct
     public void init() {
+        diseaseDistributionModel = new PieChartModel();
+        patientsDistributionByGenderModel = new PieChartModel();
+        usersDistributionForPast5YearsChart = new LineChartModel();
+
         if (isLoggedInUserAdmin()) {
-            drawPatientAgeLineChart();
+            drawDiseaseDistributionModel();
             drawPatientsDistributionByGenderModel();
+            drawUsersDistributionForPast5YearsChart();
         }
     }
 
-    public LineChartModel getLineModel() {
-        return lineModel;
+    public PieChartModel getDiseaseDistributionModel() {
+        return diseaseDistributionModel;
     }
 
     public PieChartModel getPatientsDistributionByGenderModel() {
         return patientsDistributionByGenderModel;
     }
 
-    public void drawPatientAgeLineChart() {
-        List<Patient> patientsList = QueryUtils.getPatientList(null);
-        if (patientsList != null && patientsList.size() > 0) {
+    public LineChartModel getUsersDistributionForPast5YearsChart() {
+        return usersDistributionForPast5YearsChart;
+    }
 
-            lineModel = new LineChartModel();
+    public void drawUsersDistributionForPast5YearsChart() {
+        Integer counter = 0;
+        Integer maxUsers = 0;
+        Map<String, String[]> results = new HashMap<String, String[]>();
+        results = QueryUtils.getUsersDistributionForPast5Years(year);
+        if (results != null && results.size() > 0) {
+            usersDistributionForPast5YearsChart.setTitle("Users Distribution for the Past 5 years");
+
             LineChartSeries s = new LineChartSeries();
-            s.setLabel("Patients Age");
-            Integer counter = 1;
+            s.setLabel("Users/Year");
 
-            for (Patient patient : patientsList) {
-                s.set(counter++, patient.getAge());
+            Iterator iterator = results.entrySet().iterator();
+            while (iterator.hasNext() && counter < 5) {
+                Map.Entry users = (Map.Entry) iterator.next();
+                String[] values = (String[]) users.getValue();
+                s.set(new Integer(values[0]), new Integer(values[1]));
+                if (new Integer(values[1]) > maxUsers) {
+                    maxUsers = new Integer(values[1]);
+                }
+                counter++;
             }
 
-            lineModel.addSeries(s);
-            lineModel.setLegendPosition("e");
-            Axis y = lineModel.getAxis(AxisType.Y);
+            usersDistributionForPast5YearsChart.addSeries(s);
+            usersDistributionForPast5YearsChart.setLegendPosition("e");
+            Axis y = usersDistributionForPast5YearsChart.getAxis(AxisType.Y);
             y.setMin(0);
-            y.setMax(100);
-            y.setLabel("Years Old");
+            y.setMax(maxUsers + 10);
 
-            Axis x = lineModel.getAxis(AxisType.X);
-            x.setMin(0);
-            x.setMax(10);
+            Axis x = usersDistributionForPast5YearsChart.getAxis(AxisType.X);
+            x.setMin((new Integer(year) - 5));
+            x.setMax((new Integer(year) + 1));
             x.setTickInterval("1");
-            x.setLabel("Number of Patients");
         }
     }
 
     public void drawPatientsDistributionByGenderModel() {
-        patientsDistributionByGenderModel = new PieChartModel();
-        
         String[] results = new String[2];
         results = QueryUtils.getPatientsDistributionByGender();
-       
+
         patientsDistributionByGenderModel.set("Male", new Integer(results[0]));
         patientsDistributionByGenderModel.set("Female", new Integer(results[1]));
 
@@ -85,5 +109,29 @@ public class ChartsBean extends ManagedBeanBase {
         patientsDistributionByGenderModel.setDataLabelFormatString("%d%%");
         //pie sector colors
         patientsDistributionByGenderModel.setSeriesColors("3282BD,9ECAE1");
+    }
+
+    public void drawDiseaseDistributionModel() {
+        Map<String, String[]> results = new HashMap<String, String[]>();
+        results = QueryUtils.getDiseaseDistribution(year);
+        Iterator iterator = results.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry disease = (Map.Entry) iterator.next();
+            String[] values = (String[]) disease.getValue();
+            diseaseDistributionModel.set(values[0], new Integer(values[1]));
+        }
+
+        //set title
+        diseaseDistributionModel.setTitle("Disease Percentage for year " + year);
+        //set legend position to 'e' (east), other values are 'w', 's' and 'n'
+        diseaseDistributionModel.setLegendPosition("e");
+        //show labels inside pie chart
+        diseaseDistributionModel.setShowDataLabels(true);
+        //show label text  as 'value' (numeric) , others are 'label', 'percent' (default). Only one can be used.
+        diseaseDistributionModel.setDataFormat("percent");
+        //format: %d for 'value', %s for 'label', %d%% for 'percent'
+        diseaseDistributionModel.setDataLabelFormatString("%d%%");
+        //pie sector colors
+        diseaseDistributionModel.setSeriesColors("3282BD,9ECAE1,DEEBF7");
     }
 }

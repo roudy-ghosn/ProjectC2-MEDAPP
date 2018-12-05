@@ -9,7 +9,7 @@
     <h:head>
         <title>MEDAPP - Reports</title>
     </h:head>
-    
+
     <ui:define name="header">
         <f:metadata>
             <f:viewAction action="#{reportsBean.onLoad()}" />
@@ -92,12 +92,11 @@
                     </div>
                     <hr/>
                     <div class="actionBar" style="display: #{managedBeanBase.loggedInUserPatient ? 'none' : 'block'}">
-                        <a href="patients.xhtml?faces-redirect=true" target="_self">Back</a>
+                        <a href="patients.xhtml?faces-redirect=true" target="_self">Back to Patients</a>
                         <h:commandButton value="Save" action="#{reportsBean.save()}"/>
                     </div>
                 </h:form>
-                </div>
-                
+            </div>
         </div>
 
         <ui:include src="common/footer.html" />

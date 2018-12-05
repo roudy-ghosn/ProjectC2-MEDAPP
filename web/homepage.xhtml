@@ -43,6 +43,20 @@
             document.body.removeChild(link);
             return false;
         }
+        
+        function exportDiseaseDistributionModelImage() {
+            var image = PF('diseaseDistributionModel').exportAsImage();
+            var imageSrc = $(image).attr('src');
+            var url = imageSrc.replace(/^data:image\/[^;]+/, 'data:application/octet-stream');
+            var link = document.createElement('a');
+
+            link.download = "diseaseDistributionModel.png";
+            link.href = url;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            return false;
+        }
     </script>
 
     <h:body>
@@ -151,32 +165,37 @@
             </div>
 
             <div id="adminDiv" style="display: #{managedBeanBase.loggedInUserAdmin ? 'block' : 'none'};">
-<!--                <h:form>
+                <h:form>
                     <div class="chartsSpanHolder">
                         <span class="chartsSpan">
                             <p:chart type="pie" responsive="true" model="#{chartsBean.patientsDistributionByGenderModel}" widgetVar="patientsDistributionByGenderModel"/>
-                            <h:commandButton value="Export as image" onclick="return exportPatientsDistributionByGenderModelImage();" type="Submit"/>
+                            <div class="exportBar">
+                                <h:commandButton value="Export Chart" onclick="return exportPatientsDistributionByGenderModelImage();" type="Submit"/>
+                            </div>
                         </span>
 
                         <span class="chartsSeparator"></span>
 
                         <span class="chartsSpan">
-                            <p:chart type="pie" responsive="true" model="#{chartsBean.patientsDistributionByGenderModel}"/>
+                            <p:chart type="pie" responsive="true" model="#{chartsBean.diseaseDistributionModel}" widgetVar="diseaseDistributionModel"/>
+                            <div class="exportBar">
+                                <h:commandButton value="Export Chart" onclick="return exportDiseaseDistributionModelImage();" type="Submit"/>
+                            </div>
                         </span>
                     </div>
 
                     <div class="chartsSpanHolder">
                         <span class="chartsSpan">
-                            <p:chart type="line" model="#{chartsBean.lineModel}" style="height:400px; width:800px"/>
+                            <p:chart type="line" model="#{chartsBean.usersDistributionForPast5YearsChart}" style="height:400px; width:800px"/>
                         </span>
 
                         <span class="chartsSeparator"></span>
 
                         <span class="chartsSpan">
-                            <p:chart type="line" model="#{chartsBean.lineModel}" style="height:400px; width:800px"/>
+                            <p:chart type="line" model="#{chartsBean.usersDistributionForPast5YearsChart}" style="height:400px; width:800px"/>
                         </span>
                     </div>
-                </h:form>-->
+                </h:form>
 
                 <div class="actionBar" style="margin-top: 40px;">
                     <f:view>

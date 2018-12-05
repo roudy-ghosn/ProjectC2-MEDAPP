@@ -20,31 +20,29 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped
 
 public class ReportsBean implements Serializable {
-    
+
     private Report report;
-    
-    public ReportsBean(){
+
+    public ReportsBean() {
         report = new Report();
     }
-    
-     public Report getReport() {
+
+    public Report getReport() {
         return report;
     }
-    
+
     public void setReport(Report report) {
         this.report = report;
     }
-    
-   
-    
+
     public String getReportIdFromURL() {
         return SessionUtils.getRequest().getParameter("reportId");
     }
-    
-    public void getSpecifiedReport(String id){
+
+    public void getSpecifiedReport(String id) {
         report = QueryUtils.getReport(id);
     }
-    
+
     public boolean isCreateMode() {
         return SessionUtils.getRequest().getParameter("createMode") != null;
     }
@@ -52,16 +50,15 @@ public class ReportsBean implements Serializable {
     public boolean isDisplayMode() {
         return !isCreateMode();
     }
-    
+
     public void onLoad() {
-        if(isCreateMode()){
+        if (isCreateMode()) {
             report = new Report();
-        }else{
-       getSpecifiedReport(getReportIdFromURL());
+        } else {
+            getSpecifiedReport(getReportIdFromURL());
         }
     }
-    
-    
+
     public void save() {
         if (report.getId() != null) {
             QueryUtils.updateReport(report);
@@ -69,5 +66,5 @@ public class ReportsBean implements Serializable {
             QueryUtils.insertReport(report);
         }
     }
-    
+
 }
