@@ -761,11 +761,39 @@ public class QueryUtils {
         return results;
     }
 
-    public static Map<String, String[]> getUsersDistributionForPast5Years(String year) {
+    public static Map<String, String[]> getPatientDistributionForPast5Years(String year) {
         Map<String, String[]> results = new HashMap<String, String[]>();
         String query = "Select year(Users.User_creationDate) creationDate, count(*) counter"
-                     + "  From Users"
+                     + "  From Users, Persons"
                      + " Where YEAR(Users.User_creationDate) <= ? "
+                     + "   And Persons.Person_id = Users.Person_id "
+                     + "   And Persons.Person_type = 'P' "
+                    + " Group By year(Users.User_creationDate)"
+                     + " Limit 5";
+        try {
+            statement = dbConnection.prepareStatement(query);
+            statement.setString(1, year);
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                String[] disease = new String[2];
+                disease[0] = result.getString("creationDate");
+                disease[1] = result.getString("counter");
+                results.put(result.getString("creationDate"), disease);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return results;
+    }
+
+    public static Map<String, String[]> getDoctorsDistributionForPast5Years(String year) {
+        Map<String, String[]> results = new HashMap<String, String[]>();
+        String query = "Select year(Users.User_creationDate) creationDate, count(*) counter"
+                     + "  From Users, Persons"
+                     + " Where YEAR(Users.User_creationDate) <= ? "
+                     + "   And Persons.Person_id = Users.Person_id "
+                     + "   And Persons.Person_type = 'M' "
                     + " Group By year(Users.User_creationDate)"
                      + " Limit 5";
         try {

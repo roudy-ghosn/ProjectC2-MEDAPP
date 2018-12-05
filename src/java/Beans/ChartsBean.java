@@ -28,18 +28,21 @@ public class ChartsBean extends ManagedBeanBase {
     private PieChartModel diseaseDistributionModel;
     private PieChartModel patientsDistributionByGenderModel;
 
-    private LineChartModel usersDistributionForPast5YearsChart;
+    private LineChartModel doctorsDistributionForPast5YearsChart;
+    private LineChartModel patientsDistributionForPast5YearsChart;
 
     @PostConstruct
     public void init() {
         diseaseDistributionModel = new PieChartModel();
         patientsDistributionByGenderModel = new PieChartModel();
-        usersDistributionForPast5YearsChart = new LineChartModel();
+        doctorsDistributionForPast5YearsChart = new LineChartModel();
+        patientsDistributionForPast5YearsChart = new LineChartModel();
 
         if (isLoggedInUserAdmin()) {
             drawDiseaseDistributionModel();
             drawPatientsDistributionByGenderModel();
-            drawUsersDistributionForPast5YearsChart();
+            drawDoctorsDistributionForPast5YearsChart();
+            drawPatientsDistributionForPast5YearsChart();
         }
     }
 
@@ -51,43 +54,12 @@ public class ChartsBean extends ManagedBeanBase {
         return patientsDistributionByGenderModel;
     }
 
-    public LineChartModel getUsersDistributionForPast5YearsChart() {
-        return usersDistributionForPast5YearsChart;
+    public LineChartModel getDoctorsDistributionForPast5YearsChart() {
+        return doctorsDistributionForPast5YearsChart;
     }
 
-    public void drawUsersDistributionForPast5YearsChart() {
-        Integer counter = 0;
-        Integer maxUsers = 0;
-        Map<String, String[]> results = new HashMap<String, String[]>();
-        results = QueryUtils.getUsersDistributionForPast5Years(year);
-        if (results != null && results.size() > 0) {
-            usersDistributionForPast5YearsChart.setTitle("Users Distribution for the Past 5 years");
-
-            LineChartSeries s = new LineChartSeries();
-            s.setLabel("Users/Year");
-
-            Iterator iterator = results.entrySet().iterator();
-            while (iterator.hasNext() && counter < 5) {
-                Map.Entry users = (Map.Entry) iterator.next();
-                String[] values = (String[]) users.getValue();
-                s.set(new Integer(values[0]), new Integer(values[1]));
-                if (new Integer(values[1]) > maxUsers) {
-                    maxUsers = new Integer(values[1]);
-                }
-                counter++;
-            }
-
-            usersDistributionForPast5YearsChart.addSeries(s);
-            usersDistributionForPast5YearsChart.setLegendPosition("e");
-            Axis y = usersDistributionForPast5YearsChart.getAxis(AxisType.Y);
-            y.setMin(0);
-            y.setMax(maxUsers + 10);
-
-            Axis x = usersDistributionForPast5YearsChart.getAxis(AxisType.X);
-            x.setMin((new Integer(year) - 5));
-            x.setMax((new Integer(year) + 1));
-            x.setTickInterval("1");
-        }
+    public LineChartModel getPatientsDistributionForPast5YearsChart() {
+        return patientsDistributionForPast5YearsChart;
     }
 
     public void drawPatientsDistributionByGenderModel() {
@@ -133,5 +105,75 @@ public class ChartsBean extends ManagedBeanBase {
         diseaseDistributionModel.setDataLabelFormatString("%d%%");
         //pie sector colors
         diseaseDistributionModel.setSeriesColors("3282BD,9ECAE1,DEEBF7");
+    }
+
+    public void drawDoctorsDistributionForPast5YearsChart() {
+        Integer counter = 0;
+        Integer maxUsers = 0;
+        Map<String, String[]> results = new HashMap<String, String[]>();
+        results = QueryUtils.getDoctorsDistributionForPast5Years(year);
+        if (results != null && results.size() > 0) {
+            doctorsDistributionForPast5YearsChart.setTitle("Patients Distribution for the Past 5 years");
+
+            LineChartSeries s = new LineChartSeries();
+            s.setLabel("Patients/Year");
+
+            Iterator iterator = results.entrySet().iterator();
+            while (iterator.hasNext() && counter < 5) {
+                Map.Entry users = (Map.Entry) iterator.next();
+                String[] values = (String[]) users.getValue();
+                s.set(new Integer(values[0]), new Integer(values[1]));
+                if (new Integer(values[1]) > maxUsers) {
+                    maxUsers = new Integer(values[1]);
+                }
+                counter++;
+            }
+
+            doctorsDistributionForPast5YearsChart.addSeries(s);
+            doctorsDistributionForPast5YearsChart.setLegendPosition("e");
+            Axis y = doctorsDistributionForPast5YearsChart.getAxis(AxisType.Y);
+            y.setMin(0);
+            y.setMax(maxUsers + 10);
+
+            Axis x = doctorsDistributionForPast5YearsChart.getAxis(AxisType.X);
+            x.setMin((new Integer(year) - 5));
+            x.setMax((new Integer(year) + 1));
+            x.setTickInterval("1");
+        }
+    }
+
+    public void drawPatientsDistributionForPast5YearsChart() {
+        Integer counter = 0;
+        Integer maxUsers = 0;
+        Map<String, String[]> results = new HashMap<String, String[]>();
+        results = QueryUtils.getPatientDistributionForPast5Years(year);
+        if (results != null && results.size() > 0) {
+            patientsDistributionForPast5YearsChart.setTitle("Doctors Distribution for the Past 5 years");
+
+            LineChartSeries s = new LineChartSeries();
+            s.setLabel("Doctors/Year");
+
+            Iterator iterator = results.entrySet().iterator();
+            while (iterator.hasNext() && counter < 5) {
+                Map.Entry users = (Map.Entry) iterator.next();
+                String[] values = (String[]) users.getValue();
+                s.set(new Integer(values[0]), new Integer(values[1]));
+                if (new Integer(values[1]) > maxUsers) {
+                    maxUsers = new Integer(values[1]);
+                }
+                counter++;
+            }
+
+            patientsDistributionForPast5YearsChart.addSeries(s);
+            patientsDistributionForPast5YearsChart.setLegendPosition("e");
+            Axis y = patientsDistributionForPast5YearsChart.getAxis(AxisType.Y);
+            y.setMin(0);
+            y.setMax(maxUsers + 10);
+
+            Axis x = patientsDistributionForPast5YearsChart.getAxis(AxisType.X);
+            x.setMin((new Integer(year) - 5));
+            x.setMax((new Integer(year) + 1));
+            x.setTickInterval("1");
+        }
     }
 }
