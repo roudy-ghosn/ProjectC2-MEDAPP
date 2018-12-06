@@ -134,7 +134,24 @@
                         <a href="doctors.xhtml?faces-redirect=true" target="_self">Back</a>
                         <h:commandButton value="Save" action="#{doctorsBean.save()}"/>
                     </div>
+                    <style>
+                        #map {
+                            height: 800px;
+                            width: 100%;
+                        }
+                    </style>
+                    <script>
+                        function initMap() {
+                            var uluru = {lat: #{doctorsBean.doctor.ln}, lng: #{doctorsBean.doctor.lg}};
+                            var map = new google.maps.Map(
+                            document.getElementById('map'), {zoom: 14, center: uluru});
+                            var marker = new google.maps.Marker({position: uluru, map: map});
+                        }
+                    </script>
+                    <script async='async' src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAej8IJkhvzyrpUAiyZHXkVb5mwsvkgJcc&amp;callback=initMap"> </script>
+                    <div id="map"></div>
                 </h:form>
+                
             </div>
 
             <!--List of Doctors --> 
