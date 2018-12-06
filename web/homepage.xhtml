@@ -188,7 +188,7 @@
 
                     <div class="chartsSpanHolder">
                         <span class="chartsSpan">
-                            <p:chart type="line" model="#{chartsBean.patientsDistributionForPast5YearsChart}" style="height:400px; width:800px" widgetVar="patientsDistributionForPast5YearsChart"/>
+                            <p:chart type="line" model="#{chartsBean.patientsDistributionForPast5YearsChart}" style="height:400px; width:100%" widgetVar="patientsDistributionForPast5YearsChart"/>
                             <div class="exportBar">
                                 <h:commandButton value="Export Chart" onclick="return exportPatientsDistributionForPast5YearsChartImage();" type="Submit"/>
                             </div>
@@ -197,7 +197,7 @@
                         <span class="chartsSeparator"></span>
 
                         <span class="chartsSpan">
-                            <p:chart type="line" model="#{chartsBean.doctorsDistributionForPast5YearsChart}" style="height:400px; width:800px" widgetVar="doctorsDistributionForPast5YearsChart"/>
+                            <p:chart type="line" model="#{chartsBean.doctorsDistributionForPast5YearsChart}" style="height:400px; width:100%" widgetVar="doctorsDistributionForPast5YearsChart"/>
                             <div class="exportBar">
                                 <h:commandButton value="Export Chart" onclick="return exportDoctorsDistributionForPast5YearsChartImage();" type="Submit"/>
                             </div>
