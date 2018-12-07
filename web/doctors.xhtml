@@ -8,7 +8,7 @@
     <h:head>
         <title>MEDAPP - Doctors</title>
     </h:head> 
-    
+
     <ui:define name="header">
         <f:metadata>
             <f:viewAction action="#{doctorsBean.onLoad}" />  
@@ -30,6 +30,11 @@
             font-size: 15px;
             margin-bottom: 6px;
             display: inline-block;
+        }
+        #map 
+        {
+            width: 100%;
+            height: 500px;
         }
     </style>
 
@@ -54,6 +59,17 @@
                     <h2 style="font-size: 22px; text-align: center; display: #{doctorsBean.createMode ? 'block' : 'none'}">
                         Add New Doctor
                     </h2>
+                    <hr/>
+                    <script>
+                        function initMap() {
+                            var uluru = {lat: #{doctorsBean.doctor.ln}, lng: #{doctorsBean.doctor.lg}};
+                            var map = new google.maps.Map(
+                                    document.getElementById('map'), {zoom: 14, center: uluru});
+                            var marker = new google.maps.Marker({position: uluru, map: map});
+                        }
+                    </script>
+                    <script async='async' src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYzo6G4ERnDt6DnpGhXZrI2vn3UvV4ReU&amp;callback=initMap"></script>
+                    <div id="map"></div>
                     <hr/>
                     <div class="inputHolder">
                         <h:outputLabel value="First Name"/>
@@ -134,24 +150,8 @@
                         <a href="doctors.xhtml?faces-redirect=true" target="_self">Back</a>
                         <h:commandButton value="Save" action="#{doctorsBean.save()}"/>
                     </div>
-                    <style>
-                        #map {
-                            height: 800px;
-                            width: 100%;
-                        }
-                    </style>
-                    <script>
-                        function initMap() {
-                            var uluru = {lat: #{doctorsBean.doctor.ln}, lng: #{doctorsBean.doctor.lg}};
-                            var map = new google.maps.Map(
-                            document.getElementById('map'), {zoom: 14, center: uluru});
-                            var marker = new google.maps.Marker({position: uluru, map: map});
-                        }
-                    </script>
-                    <script async='async' src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAej8IJkhvzyrpUAiyZHXkVb5mwsvkgJcc&amp;callback=initMap"> </script>
-                    <div id="map"></div>
                 </h:form>
-                
+
             </div>
 
             <!--List of Doctors --> 
